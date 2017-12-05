@@ -6,7 +6,7 @@
 namespace BehatExtension\DoctrineDataFixturesExtension\Service;
 
 use BehatExtension\DoctrineDataFixturesExtension\EventListener\PlatformListener;
-use Doctrine\Bundle\FixturesBundle\Common\DataFixtures\Loader as DoctrineFixturesLoader;
+use Doctrine\Bundle\FixturesBundle\Loader\SymfonyFixturesLoader;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\ProxyReferenceRepository;
@@ -16,8 +16,6 @@ use Doctrine\DBAL\Migrations\Configuration\Configuration;
 use Doctrine\DBAL\Migrations\Migration;
 use Doctrine\DBAL\Migrations\OutputWriter;
 use Doctrine\ORM\Tools\SchemaTool;
-use Symfony\Bridge\Doctrine\DataFixtures\ContainerAwareLoader as DataFixturesLoader;
-use Symfony\Bundle\DoctrineFixturesBundle\Common\DataFixtures\Loader as SymfonyFixturesLoader;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
@@ -28,7 +26,11 @@ use Symfony\Component\HttpKernel\Kernel;
  */
 class FixtureService
 {
+    /**
+     * @var \Doctrine\Bundle\FixturesBundle\Loader\SymfonyFixturesLoader
+     */
     private $loader;
+
     private $autoload;
     private $fixtures;
     private $directories;
@@ -44,13 +46,15 @@ class FixtureService
      */
     private $referenceRepository;
 
+
     /**
      * Constructor.
      *
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container Service container
-     * @param \Symfony\Component\HttpKernel\Kernel                      $kernel    Application kernel
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface     $container       Service container
+     * @param \Symfony\Component\HttpKernel\Kernel                          $kernel          Application kernel
+     * @param \Doctrine\Bundle\FixturesBundle\Loader\SymfonyFixturesLoader  $fixturesLoader
      */
-    public function __construct(ContainerInterface $container, Kernel $kernel)
+    public function __construct(ContainerInterface $container, Kernel $kernel, SymfonyFixturesLoader $fixturesLoader)
     {
         $this->autoload = $container->getParameter('behat.doctrine_data_fixtures.autoload');
         $this->fixtures = $container->getParameter('behat.doctrine_data_fixtures.fixtures');
@@ -63,6 +67,8 @@ class FixtureService
             $this->backupService = $container->get('behat.doctrine_data_fixtures.service.backup');
             $this->backupService->setCacheDir($this->kernel->getContainer()->getParameter('kernel.cache_dir'));
         }
+
+        $this->loader = $fixturesLoader;
     }
 
     /**
@@ -89,24 +95,6 @@ class FixtureService
 
         $this->entityManager->getEventManager()
                             ->addEventSubscriber($this->listener);
-    }
-
-    /**
-     * Retrieve Data fixtures loader.
-     *
-     * @return mixed
-     */
-    private function getFixtureLoader()
-    {
-        $container = $this->kernel->getContainer();
-
-        $loader = class_exists('Symfony\Bridge\Doctrine\DataFixtures\ContainerAwareLoader')
-            ? new DataFixturesLoader($container)
-            : (class_exists('Doctrine\Bundle\FixturesBundle\Common\DataFixtures\Loader')
-                ? new DoctrineFixturesLoader($container)
-                : new SymfonyFixturesLoader($container));
-
-        return $loader;
     }
 
     private function getHash()
@@ -224,8 +212,6 @@ class FixtureService
      */
     private function fetchFixtures()
     {
-        $this->loader = $this->getFixtureLoader();
-
         $bundleDirectories = $this->autoload ? $this->getBundleFixtureDirectories() : [];
 
         $this->fetchFixturesFromDirectories($bundleDirectories);
