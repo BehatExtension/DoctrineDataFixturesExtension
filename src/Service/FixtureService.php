@@ -375,7 +375,7 @@ class FixtureService
             $this->restoreBackup();
 
             $this->getReferenceRepository()
-                 ->load($this->getBackupFile());
+                    ->load($this->getBackupFile());
 
             return;
         }
