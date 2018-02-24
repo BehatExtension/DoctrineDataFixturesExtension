@@ -26,27 +26,11 @@ class MysqlDumpBackup implements BackupInterface
     private $mysqlBin = 'mysql';
 
     /**
-     * @param string $bin
-     */
-    public function setMysqldumpBin(string $bin)
-    {
-        $this->mysqldumpBin = $bin;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function name(): string
     {
         return 'mysql';
-    }
-
-    /**
-     * @param string $bin
-     */
-    public function setMysqlBin(string $bin)
-    {
-        $this->mysqlBin = $bin;
     }
 
     /**
