@@ -35,9 +35,9 @@ install:
 
 before_script:
   - cd tests/
-  - ./app/console doctrine:database:create
-  - ./app/console doctrine:schema:update --force
 
 script:
   - ../vendor/bin/behat --strict
+
+after_script:
   - cd ../
