@@ -53,12 +53,6 @@ class Extension implements ExtensionInterface
                 ->booleanNode('autoload')
                     ->defaultTrue()
                 ->end()
-                ->arrayNode('migrations')
-                    ->defaultValue([])
-                    ->treatFalseLike([])
-                    ->treatNullLike([])
-                    ->scalarPrototype()->end()
-                ->end()
                 ->arrayNode('directories')
                     ->defaultValue([])
                     ->treatFalseLike([])
@@ -100,7 +94,6 @@ class Extension implements ExtensionInterface
         $container->setParameter('behat.doctrine_data_fixtures.directories', $config['directories']);
         $container->setParameter('behat.doctrine_data_fixtures.fixtures', $config['fixtures']);
         $container->setParameter('behat.doctrine_data_fixtures.lifetime', $config['lifetime']);
-        $container->setParameter('behat.doctrine_data_fixtures.migrations', $config['migrations']);
         $container->setParameter('behat.doctrine_data_fixtures.use_backup', $config['use_backup']);
     }
 

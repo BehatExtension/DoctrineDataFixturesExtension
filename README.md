@@ -41,11 +41,9 @@ test isolation at the expense of increased run time).
 When **autoload** is true, the DoctrineDataFixtures extension will load the data fixtures for all
 registered bundles (similar to `app/console doctrine:fixtures:load`).
 
-When **fixtures** is set and **autoload** is false, the DoctrineDataFixtures
-extension will load the specified fixture classes.
+When **fixtures** is set, the DoctrineDataFixtures extension will load the specified fixture classes.
 
-When **directories** is set and **autoload** is false, the DoctrineDataFixtures
-extension will load the data fixtures globed from the respective directories.
+When **directories** is set, the DoctrineDataFixtures extension will load the data fixtures globed from the respective directories.
 
 ```yaml
 # behat.yml
@@ -65,22 +63,23 @@ default:
 
 # Limitations
 
-When using the SqlLiteDriver, the .db file is cached to speed up reloading.  You should periodically clear the cache as it does not detect changes to the data fixture contents because the hash is based on the collection of data fixture class names.
+When using the SqlLiteDriver, the .db file is cached to speed up reloading. 
+You should periodically clear the cache as it does not detect changes to the data fixture contents because the hash is based on the collection of data fixture class names.
 
 # Source
 
-`Github <https://github.com/vipsoft/DoctrineDataFixturesExtension>`_
+Github: [https://github.com/BehatExtension/DoctrineDataFixturesExtension](https://github.com/BehatExtension/DoctrineDataFixturesExtension)
 
-Forked from `Github <https://github.com/BehatExtension/DoctrineDataFixturesExtension>`_
+Forked from Github [https://github.com/vipsoft/DoctrineDataFixturesExtension](https://github.com/vipsoft/DoctrineDataFixturesExtension)
 
 # Copyright
 
 * Copyright (c) 2012 Anthon Pang.
-* Copyright (c) 2016 Florent Morselli.
+* Copyright (c) 2016-2018 Florent Morselli.
 
 See [LICENSE](LICENSE) for details.
 
 # Contributors
 
-* Anthon Pang `(robocoder) <http://github.com/robocoder>`_
-* `Others <https://github.com/BehatExtension/DoctrineDataFixturesExtension/graphs/contributors>`_
+* Anthon Pang ([robocoder](http://github.com/robocoder))
+* [Others contributors](https://github.com/BehatExtension/DoctrineDataFixturesExtension/graphs/contributors)

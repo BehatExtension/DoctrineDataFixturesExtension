@@ -44,7 +44,6 @@ return function (ContainerConfigurator $container) {
             '%behat.doctrine_data_fixtures.autoload%',
             '%behat.doctrine_data_fixtures.fixtures%',
             '%behat.doctrine_data_fixtures.directories%',
-            '%behat.doctrine_data_fixtures.migrations%',
             '%behat.doctrine_data_fixtures.use_backup%',
             ref(BackupService::class),
         ]);

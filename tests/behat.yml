@@ -10,7 +10,6 @@ default:
             use_backup: true
             directories: ~
             fixtures: ~
-            migrations: ~
     suites:
         fixtures:
             type: 'symfony_bundle'

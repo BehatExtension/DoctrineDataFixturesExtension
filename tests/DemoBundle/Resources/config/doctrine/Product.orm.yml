@@ -6,4 +6,9 @@ BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle\Entity\Product:
         id:
             type: 'integer'
             generator: { strategy: AUTO }
-
+    fields:
+        name:
+            type: 'string'
+        description:
+            type: 'string'
+            nullable: true
