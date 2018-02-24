@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /*
  * The MIT License (MIT)
@@ -166,7 +166,7 @@ class FixtureService
     {
         return array_filter(
             array_map(
-                function(Bundle $bundle): ?string {
+                function (Bundle $bundle): ?string {
                     $path = $bundle->getPath().'/DataFixtures/ORM';
 
                     return is_dir($path) ? $path : null;
