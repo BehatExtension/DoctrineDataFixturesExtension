@@ -19,13 +19,18 @@ namespace BehatExtension\DoctrineDataFixturesExtension\Service\Backup;
 interface BackupInterface
 {
     /**
+     * @return string
+     */
+    public function name(): string;
+
+    /**
      * Create a backup file for the given database.
      *
      * @param string $database
      * @param string $file
      * @param array  $params
      */
-    public function create($database, $file, array $params);
+    public function create(string $database, string $file, array $params);
 
     /**
      * Restore the backup file into the given database.
@@ -34,5 +39,5 @@ interface BackupInterface
      * @param string $file
      * @param array  $params
      */
-    public function restore($database, $file, array $params);
+    public function restore(string $database, string $file, array $params);
 }

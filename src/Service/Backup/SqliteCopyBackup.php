@@ -19,6 +19,14 @@ namespace BehatExtension\DoctrineDataFixturesExtension\Service\Backup;
 class SqliteCopyBackup implements BackupInterface
 {
     /**
+     * {@inheritdoc}
+     */
+    public function name(): string
+    {
+        return 'sqlite';
+    }
+
+    /**
      * Get path to .db file.
      *
      * @param array $params
@@ -50,7 +58,7 @@ class SqliteCopyBackup implements BackupInterface
     /**
      * {@inheritdoc}
      */
-    public function create($database, $file, array $params)
+    public function create(string $database, string $file, array $params)
     {
         $this->copy($this->getDatabaseFile($params), $file);
     }
@@ -58,7 +66,7 @@ class SqliteCopyBackup implements BackupInterface
     /**
      * {@inheritdoc}
      */
-    public function restore($database, $file, array $params)
+    public function restore(string $database, string $file, array $params)
     {
         $this->copy($file, $this->getDatabaseFile($params));
     }

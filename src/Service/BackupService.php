@@ -27,7 +27,7 @@ class BackupService
     private $cacheDir;
 
     /**
-     * @var array
+     * @var BackupInterface[]
      */
     private $platformBackupMap;
 
@@ -40,30 +40,21 @@ class BackupService
     }
 
     /**
-     * @param array $map
-     */
-    public function setPlatformBackupMap(array $map)
-    {
-        foreach ($map as $key => $value) {
-            $this->setPlatformBackup($key, $value);
-        }
-    }
-
-    /**
-     * @return array
-     */
-    public function getPlatformBackupMap(): array
-    {
-        return $this->platformBackupMap;
-    }
-
-    /**
-     * @param string          $platformName
      * @param BackupInterface $backup
      */
-    public function setPlatformBackup(string $platformName, BackupInterface $backup)
+    public function addBackupService(BackupInterface $backup)
     {
-        $this->platformBackupMap[$platformName] = $backup;
+        $this->platformBackupMap[$backup->name()] = $backup;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function hasBackupService(string $name): bool
+    {
+        return array_key_exists($name, $this->platformBackupMap);
     }
 
     /**
@@ -71,16 +62,13 @@ class BackupService
      *
      * @return BackupInterface
      */
-    public function getPlatformBackup(string $name): BackupInterface
+    public function getBackupService(string $name): BackupInterface
     {
-        $map = $this->getPlatformBackupMap();
-        $item = isset($map[$name]) ? $map[$name] : null;
-
-        if ($item === null) {
+        if (!$this->hasBackupService($name)) {
             throw new \RuntimeException('Unsupported platform '.$name);
         }
 
-        return $item;
+        return $this->platformBackupMap[$name];
     }
 
     /**
@@ -102,7 +90,7 @@ class BackupService
      *
      * @return bool
      */
-    public function hasBackup($hash)
+    public function hasBackup(string $hash): bool
     {
         return file_exists($this->getBackupFile($hash));
     }
@@ -115,13 +103,12 @@ class BackupService
      */
     public function createBackup(Connection $connection, string $hash)
     {
-        $platform = $connection->getDatabasePlatform();
+        $platformName = $connection->getDatabasePlatform()->getName();
         $filename = $this->getBackupFile($hash);
         $database = $connection->getDatabase();
         $params = $connection->getParams();
-        $platformName = $platform->getName();
 
-        $this->getPlatformBackup($platformName)->create($database, $filename, $params);
+        $this->getBackupService($platformName)->create($database, $filename, $params);
     }
 
     /**
@@ -132,12 +119,11 @@ class BackupService
      */
     public function restoreBackup(Connection $connection, string $hash)
     {
-        $platform = $connection->getDatabasePlatform();
+        $platformName = $connection->getDatabasePlatform()->getName();
         $filename = $this->getBackupFile($hash);
         $database = $connection->getDatabase();
         $params = $connection->getParams();
-        $platformName = $platform->getName();
 
-        $this->getPlatformBackup($platformName)->restore($database, $filename, $params);
+        $this->getBackupService($platformName)->restore($database, $filename, $params);
     }
 }

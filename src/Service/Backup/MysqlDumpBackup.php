@@ -32,6 +32,14 @@ class MysqlDumpBackup implements BackupInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function name(): string
+    {
+        return 'mysql';
+    }
+
+    /**
      * @param string $bin
      */
     public function setMysqlBin(string $bin)
@@ -62,7 +70,7 @@ class MysqlDumpBackup implements BackupInterface
     /**
      * {@inheritdoc}
      */
-    public function create($database, $file, array $params)
+    public function create(string $database, string $file, array $params)
     {
         $command = sprintf('%s %s > %s', $this->mysqldumpBin, escapeshellarg($database), escapeshellarg($file));
 
@@ -88,7 +96,7 @@ class MysqlDumpBackup implements BackupInterface
     /**
      * {@inheritdoc}
      */
-    public function restore($database, $file, array $params)
+    public function restore(string $database, string $file, array $params)
     {
         $command = sprintf('%s %s < %s', $this->mysqlBin, escapeshellarg($database), escapeshellarg($file));
 
