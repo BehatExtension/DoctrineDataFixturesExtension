@@ -19,7 +19,6 @@ use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Loader;
 use Doctrine\Common\DataFixtures\ProxyReferenceRepository;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
-use Doctrine\Common\DataFixtures\ReferenceRepository;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -77,7 +76,7 @@ class FixtureService
     private $backupService;
 
     /**
-     * @var null|ReferenceRepository
+     * @var null|ProxyReferenceRepository
      */
     private $referenceRepository;
 
@@ -109,9 +108,9 @@ class FixtureService
     /**
      * Returns the reference repository while loading the fixtures.
      *
-     * @return ReferenceRepository
+     * @return ProxyReferenceRepository
      */
-    public function getReferenceRepository(): ReferenceRepository
+    public function getReferenceRepository(): ProxyReferenceRepository
     {
         if (!$this->referenceRepository) {
             $this->referenceRepository = new ProxyReferenceRepository($this->entityManager);

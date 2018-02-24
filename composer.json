@@ -23,7 +23,8 @@
         "doctrine/data-fixtures": "^1.0",
         "doctrine/doctrine-bundle": "^1.8",
         "doctrine/doctrine-fixtures-bundle": "^3.0",
-        "doctrine/orm": "^2.6"
+        "doctrine/orm": "^2.6",
+        "symfony/process": "^4.0"
     },
     "suggest": {
         "doctrine/migrations": "Uses DBAL to load versioned database schema and migration classes"

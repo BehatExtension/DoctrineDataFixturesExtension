@@ -86,15 +86,11 @@ class Extension implements ExtensionInterface
         $loader = new PhpFileLoader($container, new FileLocator(__DIR__.'/Resources/config'));
         $loader->load('services.php');
 
-        if (!empty($config['migrations']) && !class_exists('Doctrine\DBAL\Migrations\Migration')) {
-            throw new \RuntimeException('Configuration requires doctrine/migrations package');
-        }
+        $keys = ['autoload', 'directories', 'fixtures', 'lifetime', 'use_backup'];
 
-        $container->setParameter('behat.doctrine_data_fixtures.autoload', $config['autoload']);
-        $container->setParameter('behat.doctrine_data_fixtures.directories', $config['directories']);
-        $container->setParameter('behat.doctrine_data_fixtures.fixtures', $config['fixtures']);
-        $container->setParameter('behat.doctrine_data_fixtures.lifetime', $config['lifetime']);
-        $container->setParameter('behat.doctrine_data_fixtures.use_backup', $config['use_backup']);
+        foreach ($keys as $key) {
+            $container->setParameter('behat.doctrine_data_fixtures.'.$key, $config[$key]);
+        }
     }
 
     /**
