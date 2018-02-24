@@ -75,20 +75,16 @@ class HookListener implements EventSubscriberInterface
 
     /**
      * Listens to "exercise.before" event.
-     *
-     * @param ExerciseCompleted $event
      */
-    public function beforeExercise(ExerciseCompleted $event)
+    public function beforeExercise()
     {
         $this->fixtureService->cacheFixtures();
     }
 
     /**
      * Listens to "feature.before" event.
-     *
-     * @param FeatureTested $event
      */
-    public function beforeFeature(FeatureTested $event)
+    public function beforeFeature()
     {
         if ('feature' !== $this->lifetime) {
             return;
@@ -99,10 +95,8 @@ class HookListener implements EventSubscriberInterface
 
     /**
      * Listens to "feature.after" event.
-     *
-     * @param FeatureTested $event
      */
-    public function afterFeature(FeatureTested $event)
+    public function afterFeature()
     {
         if ('feature' !== $this->lifetime) {
             return;
@@ -113,10 +107,8 @@ class HookListener implements EventSubscriberInterface
 
     /**
      * Listens to "scenario.before" and "outline.example.before" event.
-     *
-     * @param ScenarioTested $event
      */
-    public function beforeScenario(ScenarioTested $event)
+    public function beforeScenario()
     {
         if ('scenario' !== $this->lifetime) {
             return;
@@ -127,10 +119,8 @@ class HookListener implements EventSubscriberInterface
 
     /**
      * Listens to "scenario.after" and "outline.example.after" event.
-     *
-     * @param ScenarioTested $event
      */
-    public function afterScenario(ScenarioTested $event)
+    public function afterScenario()
     {
         if ('scenario' !== $this->lifetime) {
             return;

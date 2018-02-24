@@ -16,6 +16,7 @@ namespace BehatExtension\DoctrineDataFixturesExtension\EventListener;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\DBAL\Platforms\MySqlPlatform;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Platform listener.
@@ -39,10 +40,17 @@ class PlatformListener implements EventSubscriber
      * Pre-truncate.
      *
      * @param LifecycleEventArgs $args
+     *
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function preTruncate(LifecycleEventArgs $args)
     {
-        $connection = $args->getObjectManager()->getConnection();
+        $objectManager = $args->getObjectManager();
+        if (!$objectManager instanceof EntityManagerInterface) {
+            throw new \RuntimeException('The object manager is not an entity manager.');
+        }
+
+        $connection = $objectManager->getConnection();
         $platform = $connection->getDatabasePlatform();
 
         if ($platform instanceof MySqlPlatform) {
@@ -54,10 +62,17 @@ class PlatformListener implements EventSubscriber
      * Post-truncate.
      *
      * @param LifecycleEventArgs $args
+     *
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function postTruncate(LifecycleEventArgs $args)
     {
-        $connection = $args->getObjectManager()->getConnection();
+        $objectManager = $args->getObjectManager();
+        if (!$objectManager instanceof EntityManagerInterface) {
+            throw new \RuntimeException('The object manager is not an entity manager.');
+        }
+
+        $connection = $objectManager->getConnection();
         $platform = $connection->getDatabasePlatform();
 
         if ($platform instanceof MySqlPlatform) {
