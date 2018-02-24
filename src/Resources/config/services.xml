@@ -3,31 +3,10 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <parameters>
-        <parameter key="behat.doctrine_data_fixtures.service.hook_listener.class">BehatExtension\DoctrineDataFixturesExtension\EventListener\HookListener</parameter>
-        <parameter key="behat.doctrine_data_fixtures.service.fixture_loader.class">BehatExtension\DoctrineDataFixturesExtension\Service\FixtureService</parameter>
-        <parameter key="behat.doctrine_data_fixtures.initializer.fixture_service_aware.class">BehatExtension\DoctrineDataFixturesExtension\Context\Initializer\FixtureServiceAwareInitializer</parameter>
-        <parameter key="behat.doctrine_data_fixtures.service.backup.class">BehatExtension\DoctrineDataFixturesExtension\Service\BackupService</parameter>
-        <parameter key="behat.doctrine_data_fixtures.service.backup_mysql.class">BehatExtension\DoctrineDataFixturesExtension\Service\Backup\MysqlDumpBackup</parameter>
-        <parameter key="behat.doctrine_data_fixtures.service.backup_sqlite.class">BehatExtension\DoctrineDataFixturesExtension\Service\Backup\SqliteCopyBackup</parameter>
-        <parameter key="behat.doctrine_data_fixtures.service.backup_mysql.mysql_bin">mysql</parameter>
-        <parameter key="behat.doctrine_data_fixtures.service.backup_mysql.mysqldump_bin">mysqldump</parameter>
-    </parameters>
-
     <services>
-
-        <service id="behat.doctrine_data_fixtures.service.backup_mysql" class="%behat.doctrine_data_fixtures.service.backup_mysql.class%">
-            <call method="setMysqlBin">
-                <argument>%behat.doctrine_data_fixtures.service.backup_mysql.mysql_bin%</argument>
-            </call>
-            <call method="setMysqldumpBin">
-                <argument>%behat.doctrine_data_fixtures.service.backup_mysql.mysqldump_bin%</argument>
-            </call>
-        </service>
-
-        <service id="behat.doctrine_data_fixtures.service.backup_sqlite" class="%behat.doctrine_data_fixtures.service.backup_sqlite.class%"/>
-
-        <service id="behat.doctrine_data_fixtures.service.backup" class="%behat.doctrine_data_fixtures.service.backup.class%">
+        <service id="behat.doctrine_data_fixtures.service.backup_mysql" class="BehatExtension\DoctrineDataFixturesExtension\Service\Backup\MysqlDumpBackup"/>
+        <service id="behat.doctrine_data_fixtures.service.backup_sqlite" class="BehatExtension\DoctrineDataFixturesExtension\Service\Backup\SqliteCopyBackup"/>
+        <service id="behat.doctrine_data_fixtures.service.backup" class="BehatExtension\DoctrineDataFixturesExtension\Service\BackupService">
             <call method="setPlatformBackupMap">
                 <argument type="collection">
                     <argument key="sqlite" type="service" id="behat.doctrine_data_fixtures.service.backup_sqlite"/>
@@ -36,7 +15,7 @@
             </call>
         </service>
 
-        <service id="behat.doctrine_data_fixtures.service.hook_listener" class="%behat.doctrine_data_fixtures.service.hook_listener.class%">
+        <service id="behat.doctrine_data_fixtures.service.hook_listener" class="BehatExtension\DoctrineDataFixturesExtension\EventListener\HookListener">
             <argument>%behat.doctrine_data_fixtures.lifetime%</argument>
             <call method="setFixtureService">
                 <argument type="service" id="behat.doctrine_data_fixtures.service.fixture_loader" />
@@ -44,13 +23,13 @@
             <tag name="event_dispatcher.subscriber" />
         </service>
 
-        <service id="behat.doctrine_data_fixtures.service.fixture_loader" class="%behat.doctrine_data_fixtures.service.fixture_loader.class%">
+        <service id="behat.doctrine_data_fixtures.service.fixture_loader" class="BehatExtension\DoctrineDataFixturesExtension\Service\FixtureService">
             <argument type="service" id="service_container" />
             <argument type="service" id="symfony2_extension.kernel" />
             <argument>%behat.doctrine_data_fixtures.use_backup%</argument>
         </service>
 
-        <service id="behat.doctrine_data_fixtures.initializer.fixture_service_aware" class="%behat.doctrine_data_fixtures.initializer.fixture_service_aware.class%">
+        <service id="behat.doctrine_data_fixtures.initializer.fixture_service_aware" class="BehatExtension\DoctrineDataFixturesExtension\Context\Initializer\FixtureServiceAwareInitializer">
             <argument type="service" id="behat.doctrine_data_fixtures.service.fixture_loader"/>
             <tag name="context.initializer"/>
         </service>

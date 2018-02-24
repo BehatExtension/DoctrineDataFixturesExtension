@@ -17,7 +17,7 @@
         }
     ],
     "require": {
-        "php": ">=5.3.6",
+        "php": "^5.3.6|^7.0",
         "behat/behat": "^3.0",
         "behat/symfony2-extension": "^2.0",
         "doctrine/data-fixtures": "^1.0"
@@ -27,6 +27,9 @@
     },
     "autoload": {
         "psr-4": { "BehatExtension\\DoctrineDataFixturesExtension\\": "src/" }
+    },
+    "autoload-dev": {
+        "psr-4": { "BehatExtension\\DoctrineDataFixturesExtension\\Tests": "tests/" }
     },
     "extra": {
         "branch-alias": {
