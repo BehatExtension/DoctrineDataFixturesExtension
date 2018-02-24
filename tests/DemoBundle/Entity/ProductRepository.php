@@ -9,4 +9,10 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-$loader = require_once __DIR__.'/../../vendor/autoload.php';
+namespace BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle\Entity;
+
+use Doctrine\ORM\EntityRepository;
+
+class ProductRepository extends EntityRepository
+{
+}

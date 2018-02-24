@@ -9,21 +9,17 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle;
+namespace BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
-/**
- * @ORM\Entity()
- */
 class Product
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
     private $id;
 
-    // add your own fields
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
 }

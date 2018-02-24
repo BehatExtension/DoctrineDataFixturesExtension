@@ -51,13 +51,22 @@ class Extension implements ExtensionInterface
                 ->booleanNode('autoload')
                     ->defaultTrue()
                 ->end()
-                ->variableNode('migrations')
-                    ->defaultNull()
+                ->arrayNode('migrations')
+                    ->defaultValue([])
+                    ->treatFalseLike([])
+                    ->treatNullLike([])
+                    ->scalarPrototype()->end()
                 ->end()
                 ->arrayNode('directories')
+                    ->defaultValue([])
+                    ->treatFalseLike([])
+                    ->treatNullLike([])
                     ->scalarPrototype()->end()
                 ->end()
                 ->arrayNode('fixtures')
+                    ->defaultValue([])
+                    ->treatFalseLike([])
+                    ->treatNullLike([])
                     ->scalarPrototype()->end()
                 ->end()
                 ->scalarNode('lifetime')
@@ -81,11 +90,8 @@ class Extension implements ExtensionInterface
         $loader = new PhpFileLoader($container, new FileLocator(__DIR__.'/Resources/config'));
         $loader->load('services.php');
 
-        if (isset($config['migrations'])) {
-            if (!class_exists('Doctrine\DBAL\Migrations\Migration')) {
-                throw new \RuntimeException('Configuration requires doctrine/migrations package');
-            }
-            $config['migrations'] = (array) $config['migrations'];
+        if (!empty($config['migrations']) && !class_exists('Doctrine\DBAL\Migrations\Migration')) {
+            throw new \RuntimeException('Configuration requires doctrine/migrations package');
         }
 
         $container->setParameter('behat.doctrine_data_fixtures.autoload', $config['autoload']);

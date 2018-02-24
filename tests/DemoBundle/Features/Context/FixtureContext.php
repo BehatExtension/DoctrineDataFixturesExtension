@@ -13,10 +13,14 @@ namespace BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle\Features
 
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
+use BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle\Entity\ProductManager;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 class FixtureContext implements KernelAwareContext
 {
+    /**
+     * @var KernelInterface
+     */
     private $kernel;
 
     /**

@@ -20,3 +20,4 @@ doctrine:
     orm:
         default_entity_manager: default
         auto_generate_proxy_classes: true
+        auto_mapping: true

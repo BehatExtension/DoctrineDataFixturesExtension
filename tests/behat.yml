@@ -7,8 +7,10 @@ default:
         BehatExtension\DoctrineDataFixturesExtension\Extension:
             lifetime: 'feature'
             autoload: true
+            use_backup: true
             directories: ~
             fixtures: ~
+            migrations: ~
     suites:
         fixtures:
             type: 'symfony_bundle'

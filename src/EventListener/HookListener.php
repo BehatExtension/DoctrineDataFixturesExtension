@@ -31,7 +31,7 @@ class HookListener implements EventSubscriberInterface
     private $lifetime;
 
     /**
-     * @var object
+     * @var FixtureService
      */
     private $fixtureService;
 

@@ -19,15 +19,15 @@ use Doctrine\Common\DataFixtures\ProxyReferenceRepository;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\Common\DataFixtures\ReferenceRepository;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\DBAL\Migrations\Configuration\Configuration;
 use Doctrine\DBAL\Migrations\Migration;
 use Doctrine\DBAL\Migrations\OutputWriter;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bridge\Doctrine\DataFixtures\ContainerAwareLoader as DataFixturesLoader;
 use Symfony\Bundle\DoctrineFixturesBundle\Common\DataFixtures\Loader as SymfonyFixturesLoader;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\HttpKernel\Kernel;
 
 /**
@@ -55,7 +55,7 @@ class FixtureService
     private $directories;
 
     /**
-     * @var array|null
+     * @var array
      */
     private $migrations;
 
@@ -63,7 +63,15 @@ class FixtureService
      * @var Kernel
      */
     private $kernel;
+
+    /**
+     * @var EntityManagerInterface
+     */
     private $entityManager;
+
+    /**
+     * @var PlatformListener
+     */
     private $listener;
 
     /**
@@ -82,11 +90,17 @@ class FixtureService
     private $referenceRepository;
 
     /**
-     * Constructor.
+     * FixtureService constructor.
      *
-     * @param Kernel $kernel    Application kernel
+     * @param Kernel        $kernel
+     * @param bool          $autoload
+     * @param array         $fixtures
+     * @param array         $directories
+     * @param array         $migrations
+     * @param bool          $useBackup
+     * @param BackupService $backupService
      */
-    public function __construct(Kernel $kernel, bool $autoload, array $fixtures, array $directories, ?array $migrations, bool $useBackup, BackupService $backupService)
+    public function __construct(Kernel $kernel, bool $autoload, array $fixtures, array $directories, array $migrations, bool $useBackup, BackupService $backupService)
     {
         $this->kernel = $kernel;
         $this->autoload = $autoload;
@@ -122,7 +136,6 @@ class FixtureService
     {
         $this->listener = new PlatformListener();
         $this->entityManager = $this->kernel->getContainer()->get('doctrine')->getManager();
-
         $this->entityManager->getEventManager()->addEventSubscriber($this->listener);
     }
 
@@ -152,14 +165,14 @@ class FixtureService
     /**
      * Calculate hash on data fixture class names, class file names and modification timestamps.
      *
-     * @param array|null $migrations
+     * @param array $migrations
      * @param array      $fixtures
      *
      * @return string
      */
-    private function generateHash(?array $migrations, array $fixtures): string
+    private function generateHash(array $migrations, array $fixtures): string
     {
-        if ($migrations) {
+        if (!empty($migrations)) {
             array_walk($migrations, function (&$migration) {
                 $migration .= '@'.filemtime($migration);
             });
@@ -188,7 +201,7 @@ class FixtureService
     {
         return array_filter(
             array_map(
-                function ($bundle) {
+                function (Bundle $bundle): ?string {
                     $path = $bundle->getPath().'/DataFixtures/ORM';
 
                     return is_dir($path) ? $path : null;
@@ -264,8 +277,8 @@ class FixtureService
         $bundleDirectories = $this->autoload ? $this->getBundleFixtureDirectories() : [];
 
         $this->fetchFixturesFromDirectories($bundleDirectories);
-        $this->fetchFixturesFromDirectories($this->directories ?: []);
-        $this->fetchFixturesFromClasses($this->fixtures ?: []);
+        $this->fetchFixturesFromDirectories($this->directories);
+        $this->fetchFixturesFromClasses($this->fixtures);
 
         return $this->loader->getFixtures();
     }
@@ -279,7 +292,7 @@ class FixtureService
      */
     private function fetchMigrations(): array
     {
-        if (null ===$this->migrations || empty($this->migrations)) {
+        if (empty($this->migrations)) {
             return [];
         }
 
@@ -358,7 +371,7 @@ class FixtureService
      */
     private function runMigrations()
     {
-        if (null === $this->migrations || empty($this->migrations)) {
+        if (empty($this->migrations)) {
             return;
         }
 
@@ -393,6 +406,8 @@ class FixtureService
 
     /**
      * Create database using doctrine schema tool.
+     *
+     * @throws \Doctrine\ORM\Tools\ToolsException
      */
     private function createDatabase()
     {
@@ -489,7 +504,7 @@ class FixtureService
             return;
         }
 
-        if ($this->migrations === null) {
+        if (empty($this->migrations)) {
             $this->dropDatabase();
             $this->createDatabase();
         }
@@ -497,8 +512,7 @@ class FixtureService
         $this->loadFixtures();
         $this->createBackup();
 
-        $this->getReferenceRepository()
-             ->save($this->getBackupFile());
+        $this->getReferenceRepository()->save($this->getBackupFile());
     }
 
     /**

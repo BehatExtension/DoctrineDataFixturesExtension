@@ -51,7 +51,7 @@ class PlatformListener implements EventSubscriber
     /**
      * Post-truncate.
      *
-     * @param LifecyleEventArgs $args
+     * @param LifecycleEventArgs $args
      */
     public function postTruncate(LifecycleEventArgs $args)
     {
