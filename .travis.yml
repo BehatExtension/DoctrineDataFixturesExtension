@@ -33,10 +33,7 @@ before_install:
 install:
   - composer install --no-progress
 
-before_script:
-  - export PATH=./vendor/bin:$PATH
-
 script:
   - cd tests/
-  - behat --strict
+  - ../vendor/bin/behat --strict
   - cd ../
