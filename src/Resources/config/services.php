@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /*
  * The MIT License (MIT)
@@ -20,7 +20,7 @@ use BehatExtension\DoctrineDataFixturesExtension\Service\FixtureService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\ref;
 
-return function(ContainerConfigurator $container) {
+return function (ContainerConfigurator $container) {
     $container = $container->services()->defaults()
         ->private()
         ->autoconfigure();
