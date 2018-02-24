@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /*
  * The MIT License (MIT)
@@ -22,7 +22,6 @@ class ProductLoader extends Fixture
     public function load(ObjectManager $manager)
     {
         array_map(function (array $item) use ($manager) {
-
             $product = new Product(
                 $item['name'],
                 $item['description']
@@ -36,11 +35,11 @@ class ProductLoader extends Fixture
     {
         return [
             [
-                'name' => 'Product #1',
+                'name'        => 'Product #1',
                 'description' => 'This is the product number 1',
             ],
             [
-                'name' => 'Product #2',
+                'name'        => 'Product #2',
                 'description' => 'This is the product number 2',
             ],
         ];
