@@ -4,22 +4,14 @@ default:
             paths: false
     extensions:
         Behat\Symfony2Extension: ~
-        Behat\MinkExtension:
-            default_session: 'symfony2'
-            sessions:
-                symfony2:
-                    symfony2: ~
-    extensions:
         BehatExtension\DoctrineDataFixturesExtension\Extension:
-            lifetime: feature
+            lifetime: 'feature'
             autoload: true
-            directories:
-                - /project/src/AcmeAnalytics/Tests/DataFixtures/ORM
-            fixtures:
-                - Acme\StoreBundle\DataFixture\ORM\Categories
-                - Acme\StoreBundle\DataFixture\ORM\Apps
-                - Acme\VendorBundle\DataFixture\ORM\Vendors
+            directories: ~
+            fixtures: ~
     suites:
         fixtures:
-            type: symfony_bundle
+            type: 'symfony_bundle'
             bundle: 'DemoBundle'
+            contexts:
+                - 'BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle\Features\Context\FixtureContext'

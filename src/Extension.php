@@ -82,11 +82,10 @@ class Extension implements ExtensionInterface
         $loader->load('services.php');
 
         if (isset($config['migrations'])) {
-            $config['migrations'] = (array) $config['migrations'];
-
             if (!class_exists('Doctrine\DBAL\Migrations\Migration')) {
                 throw new \RuntimeException('Configuration requires doctrine/migrations package');
             }
+            $config['migrations'] = (array) $config['migrations'];
         }
 
         $container->setParameter('behat.doctrine_data_fixtures.autoload', $config['autoload']);

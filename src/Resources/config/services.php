@@ -40,9 +40,13 @@ return function (ContainerConfigurator $container) {
         ->tag('event_dispatcher.subscriber');
     $container->set(FixtureService::class)
         ->args([
-            ref('service_container'),
             ref('symfony2_extension.kernel'),
+            '%behat.doctrine_data_fixtures.autoload%',
+            '%behat.doctrine_data_fixtures.fixtures%',
+            '%behat.doctrine_data_fixtures.directories%',
+            '%behat.doctrine_data_fixtures.migrations%',
             '%behat.doctrine_data_fixtures.use_backup%',
+            ref(BackupService::class),
         ]);
     $container->set(FixtureServiceAwareInitializer::class)
         ->args([

@@ -19,6 +19,7 @@ use Doctrine\Common\DataFixtures\ProxyReferenceRepository;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\Common\DataFixtures\ReferenceRepository;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\DBAL\Migrations\Configuration\Configuration;
 use Doctrine\DBAL\Migrations\Migration;
 use Doctrine\DBAL\Migrations\OutputWriter;
@@ -37,14 +38,42 @@ use Symfony\Component\HttpKernel\Kernel;
 class FixtureService
 {
     private $loader;
+
+    /**
+     * @var bool
+     */
     private $autoload;
+
+    /**
+     * @var array
+     */
     private $fixtures;
+
+    /**
+     * @var array
+     */
     private $directories;
+
+    /**
+     * @var array|null
+     */
     private $migrations;
+
+    /**
+     * @var Kernel
+     */
     private $kernel;
     private $entityManager;
     private $listener;
+
+    /**
+     * @var bool
+     */
     private $useBackup;
+
+    /**
+     * @var BackupService
+     */
     private $backupService;
 
     /**
@@ -55,20 +84,19 @@ class FixtureService
     /**
      * Constructor.
      *
-     * @param ContainerInterface $container Service container
-     * @param Kernel             $kernel    Application kernel
+     * @param Kernel $kernel    Application kernel
      */
-    public function __construct(ContainerInterface $container, Kernel $kernel)
+    public function __construct(Kernel $kernel, bool $autoload, array $fixtures, array $directories, ?array $migrations, bool $useBackup, BackupService $backupService)
     {
-        $this->autoload = $container->getParameter('behat.doctrine_data_fixtures.autoload');
-        $this->fixtures = $container->getParameter('behat.doctrine_data_fixtures.fixtures');
-        $this->directories = $container->getParameter('behat.doctrine_data_fixtures.directories');
-        $this->migrations = $container->getParameter('behat.doctrine_data_fixtures.migrations');
-        $this->useBackup = $container->getParameter('behat.doctrine_data_fixtures.use_backup');
         $this->kernel = $kernel;
+        $this->autoload = $autoload;
+        $this->fixtures = $fixtures;
+        $this->directories = $directories;
+        $this->useBackup = $useBackup;
+        $this->migrations = $migrations;
 
         if ($this->useBackup) {
-            $this->backupService = $container->get('behat.doctrine_data_fixtures.service.backup');
+            $this->backupService = $backupService;
             $this->backupService->setCacheDir($this->kernel->getContainer()->getParameter('kernel.cache_dir'));
         }
     }
@@ -251,11 +279,7 @@ class FixtureService
      */
     private function fetchMigrations(): array
     {
-        if (!isset($this->migrations)) {
-            return;
-        }
-
-        if (empty($this->migrations)) {
+        if (null ===$this->migrations || empty($this->migrations)) {
             return [];
         }
 
@@ -334,7 +358,7 @@ class FixtureService
      */
     private function runMigrations()
     {
-        if (!isset($this->migrations)) {
+        if (null === $this->migrations || empty($this->migrations)) {
             return;
         }
 

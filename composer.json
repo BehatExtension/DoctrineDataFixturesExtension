@@ -35,5 +35,11 @@
         "branch-alias": {
             "dev-master": "2.0.x-dev"
         }
+    },
+    "require-dev": {
+        "doctrine/doctrine-bundle": "^1.8",
+        "doctrine/doctrine-fixtures-bundle": "^3.0",
+        "doctrine/orm": "^2.6",
+        "doctrine/migrations": "^1.6"
     }
 }

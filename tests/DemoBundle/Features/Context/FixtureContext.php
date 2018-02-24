@@ -11,6 +11,7 @@
 
 namespace BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle\Features\Context;
 
+use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -27,5 +28,21 @@ class FixtureContext implements KernelAwareContext
     public function setKernel(KernelInterface $kernel)
     {
         $this->kernel = $kernel;
+    }
+
+    /**
+     * @When I list lines in the entity table
+     */
+    public function iListLinesInTheEntityTable()
+    {
+        throw new PendingException();
+    }
+
+    /**
+     * @Then I should see records
+     */
+    public function iShouldSeeRecords()
+    {
+        throw new PendingException();
     }
 }

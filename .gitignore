@@ -1,1 +1,3 @@
+/tests/app/cache
 composer.lock
+tests/app/sqlite.db.cache

@@ -37,4 +37,6 @@ before_script:
   - export PATH=./vendor/bin:$PATH
 
 script:
+  - cd tests/
   - behat --strict
+  - cd ../

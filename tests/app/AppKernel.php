@@ -21,7 +21,9 @@ class AppKernel extends Kernel
     {
         $bundles = [
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-            new Behat\Sf2DemoBundle\BehatSf2DemoBundle(),
+            new BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle\DemoBundle(),
+            new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+            new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
         ];
 
         return $bundles;

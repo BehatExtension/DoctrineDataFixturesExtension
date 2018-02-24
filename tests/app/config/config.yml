@@ -1,9 +1,22 @@
 framework:
     secret: 'test_test_test'
-    router: ~
     default_locale: en
     session: ~
     profiler: { only_exceptions: false }
     test: ~
     session:
         storage_id: session.storage.filesystem
+
+doctrine:
+    dbal:
+        default_connection: default
+        connections:
+            default:
+                driver:  'pdo_sqlite'
+                user:    'test'
+                path:    '%kernel.root_dir%/sqlite.db.cache'
+                memory: true
+                charset: 'utf8'
+    orm:
+        default_entity_manager: default
+        auto_generate_proxy_classes: true
