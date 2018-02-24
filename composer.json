@@ -29,7 +29,7 @@
         "psr-4": { "BehatExtension\\DoctrineDataFixturesExtension\\": "src/" }
     },
     "autoload-dev": {
-        "psr-4": { "BehatExtension\\DoctrineDataFixturesExtension\\Tests": "tests/" }
+        "psr-4": { "BehatExtension\\DoctrineDataFixturesExtension\\Tests\\": "tests/" }
     },
     "extra": {
         "branch-alias": {
