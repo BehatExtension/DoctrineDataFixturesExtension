@@ -43,5 +43,4 @@ before_script:
   - export PATH=./vendor/bin:$PATH
 
 script:
-  - phpspec run -f pretty --no-interaction
   - behat --strict

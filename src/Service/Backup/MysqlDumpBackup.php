@@ -26,7 +26,7 @@ class MysqlDumpBackup implements BackupInterface
     /**
      * @param string $bin
      */
-    public function setMysqldumpBin($bin)
+    public function setMysqldumpBin(string $bin)
     {
         $this->mysqldumpBin = $bin;
     }
@@ -34,7 +34,7 @@ class MysqlDumpBackup implements BackupInterface
     /**
      * @param string $bin
      */
-    public function setMysqlBin($bin)
+    public function setMysqlBin(string $bin)
     {
         $this->mysqlBin = $bin;
     }
@@ -46,7 +46,7 @@ class MysqlDumpBackup implements BackupInterface
      *
      * @return int
      */
-    protected function runCommand($command)
+    protected function runCommand(string $command): int
     {
         $process = new Process($command);
 

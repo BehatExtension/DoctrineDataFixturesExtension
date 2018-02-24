@@ -27,14 +27,14 @@ class BackupService
     private $cacheDir;
 
     /**
-     * @var string
+     * @var array
      */
     private $platformBackupMap;
 
     /**
      * @param string $cacheDir
      */
-    public function setCacheDir($cacheDir)
+    public function setCacheDir(string $cacheDir)
     {
         $this->cacheDir = $cacheDir;
     }
@@ -52,16 +52,16 @@ class BackupService
     /**
      * @return array
      */
-    public function getPlatformBackupMap()
+    public function getPlatformBackupMap(): array
     {
         return $this->platformBackupMap;
     }
 
     /**
-     * @param string                                                                       $platformName
-     * @param \BehatExtension\DoctrineDataFixturesExtension\Service\Backup\BackupInterface $backup
+     * @param string          $platformName
+     * @param BackupInterface $backup
      */
-    public function setPlatformBackup($platformName, BackupInterface $backup)
+    public function setPlatformBackup(string $platformName, BackupInterface $backup)
     {
         $this->platformBackupMap[$platformName] = $backup;
     }
@@ -69,9 +69,9 @@ class BackupService
     /**
      * @param string $name
      *
-     * @return \BehatExtension\DoctrineDataFixturesExtension\Service\Backup\BackupInterface
+     * @return BackupInterface
      */
-    public function getPlatformBackup($name)
+    public function getPlatformBackup(string $name): BackupInterface
     {
         $map = $this->getPlatformBackupMap();
         $item = isset($map[$name]) ? $map[$name] : null;
@@ -90,7 +90,7 @@ class BackupService
      *
      * @return string
      */
-    public function getBackupFile($hash)
+    public function getBackupFile(string $hash): string
     {
         return $this->cacheDir.DIRECTORY_SEPARATOR.'test_'.$hash;
     }
@@ -110,10 +110,10 @@ class BackupService
     /**
      * Create a backup for the given connection / hash.
      *
-     * @param \Doctrine\DBAL\Connection $connection
-     * @param string                    $hash
+     * @param Connection $connection
+     * @param string     $hash
      */
-    public function createBackup(Connection $connection, $hash)
+    public function createBackup(Connection $connection, string $hash)
     {
         $platform = $connection->getDatabasePlatform();
         $filename = $this->getBackupFile($hash);
@@ -127,10 +127,10 @@ class BackupService
     /**
      * Restore the backup for the given connection / hash.
      *
-     * @param \Doctrine\DBAL\Connection $connection
-     * @param string                    $hash
+     * @param Connection $connection
+     * @param string     $hash
      */
-    public function restoreBackup(Connection $connection, $hash)
+    public function restoreBackup(Connection $connection, string $hash)
     {
         $platform = $connection->getDatabasePlatform();
         $filename = $this->getBackupFile($hash);

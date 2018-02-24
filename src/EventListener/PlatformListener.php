@@ -36,7 +36,7 @@ class PlatformListener implements EventSubscriber
     /**
      * Pre-truncate.
      *
-     * @param \Doctrine\Common\Persistence\Event\LifecycleEventArgs $args
+     * @param LifecycleEventArgs $args
      */
     public function preTruncate(LifecycleEventArgs $args)
     {
@@ -51,7 +51,7 @@ class PlatformListener implements EventSubscriber
     /**
      * Post-truncate.
      *
-     * @param \Doctrine\Common\Persistence\Event\LifecyleEventArgs $args
+     * @param LifecyleEventArgs $args
      */
     public function postTruncate(LifecycleEventArgs $args)
     {

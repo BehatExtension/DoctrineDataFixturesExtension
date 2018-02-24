@@ -27,7 +27,9 @@ class FixtureServiceAwareInitializer implements ContextInitializer
     private $fixtureService;
 
     /**
-     * Constructor.
+     * FixtureServiceAwareInitializer constructor.
+     *
+     * @param FixtureService $fixtureService
      */
     public function __construct(FixtureService $fixtureService)
     {
@@ -35,9 +37,7 @@ class FixtureServiceAwareInitializer implements ContextInitializer
     }
 
     /**
-     * Initializes provided context.
-     *
-     * @param Context $context
+     * {@inheritdoc}
      */
     public function initializeContext(Context $context)
     {
@@ -55,7 +55,7 @@ class FixtureServiceAwareInitializer implements ContextInitializer
      *
      * @return bool
      */
-    private function usesReferenceDictionary(Context $context)
+    private function usesReferenceDictionary(Context $context): bool
     {
         $refl = new \ReflectionObject($context);
 
@@ -63,10 +63,6 @@ class FixtureServiceAwareInitializer implements ContextInitializer
             return false;
         }
 
-        if (!in_array('BehatExtension\DoctrineDataFixturesExtension\Context\ReferenceDictionary', $refl->getTraitNames())) {
-            return false;
-        }
-
-        return true;
+        return in_array('BehatExtension\DoctrineDataFixturesExtension\Context\ReferenceDictionary', $refl->getTraitNames());
     }
 }

@@ -17,10 +17,12 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\ProxyReferenceRepository;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
+use Doctrine\Common\DataFixtures\ReferenceRepository;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\DBAL\Migrations\Configuration\Configuration;
 use Doctrine\DBAL\Migrations\Migration;
 use Doctrine\DBAL\Migrations\OutputWriter;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bridge\Doctrine\DataFixtures\ContainerAwareLoader as DataFixturesLoader;
 use Symfony\Bundle\DoctrineFixturesBundle\Common\DataFixtures\Loader as SymfonyFixturesLoader;
@@ -46,15 +48,15 @@ class FixtureService
     private $backupService;
 
     /**
-     * @var \Doctrine\Common\DataFixtures\ProxyReferenceRepository
+     * @var null|ReferenceRepository
      */
     private $referenceRepository;
 
     /**
      * Constructor.
      *
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container Service container
-     * @param \Symfony\Component\HttpKernel\Kernel                      $kernel    Application kernel
+     * @param ContainerInterface $container Service container
+     * @param Kernel             $kernel    Application kernel
      */
     public function __construct(ContainerInterface $container, Kernel $kernel)
     {
@@ -74,9 +76,9 @@ class FixtureService
     /**
      * Returns the reference repository while loading the fixtures.
      *
-     * @return \Doctrine\Common\DataFixtures\ReferenceRepository|null
+     * @return ReferenceRepository
      */
-    public function getReferenceRepository()
+    public function getReferenceRepository(): ReferenceRepository
     {
         if (!$this->referenceRepository) {
             $this->referenceRepository = new ProxyReferenceRepository($this->entityManager);
@@ -93,8 +95,7 @@ class FixtureService
         $this->listener = new PlatformListener();
         $this->entityManager = $this->kernel->getContainer()->get('doctrine')->getManager();
 
-        $this->entityManager->getEventManager()
-                            ->addEventSubscriber($this->listener);
+        $this->entityManager->getEventManager()->addEventSubscriber($this->listener);
     }
 
     /**
@@ -115,7 +116,7 @@ class FixtureService
         return $loader;
     }
 
-    private function getHash()
+    private function getHash(): string
     {
         return $this->generateHash($this->migrations, $this->fixtures);
     }
@@ -128,7 +129,7 @@ class FixtureService
      *
      * @return string
      */
-    private function generateHash($migrations, $fixtures)
+    private function generateHash(?array $migrations, array $fixtures): string
     {
         if ($migrations) {
             array_walk($migrations, function (&$migration) {
@@ -155,7 +156,7 @@ class FixtureService
      *
      * @return array Array of directories
      */
-    private function getBundleFixtureDirectories()
+    private function getBundleFixtureDirectories(): array
     {
         return array_filter(
             array_map(
@@ -174,7 +175,7 @@ class FixtureService
      *
      * @param array $directoryNames
      */
-    private function fetchFixturesFromDirectories($directoryNames)
+    private function fetchFixturesFromDirectories(array $directoryNames)
     {
         foreach ($directoryNames as $directoryName) {
             $this->loader->loadFromDirectory($directoryName);
@@ -186,7 +187,7 @@ class FixtureService
      *
      * @param string $className Class name
      */
-    private function loadFixtureClass($className)
+    private function loadFixtureClass(string $className)
     {
         $fixture = new $className();
 
@@ -210,7 +211,7 @@ class FixtureService
      *
      * @param array $classNames
      */
-    private function fetchFixturesFromClasses($classNames)
+    private function fetchFixturesFromClasses(array $classNames)
     {
         foreach ($classNames as $className) {
             if (substr($className, 0, 1) !== '\\') {
@@ -228,7 +229,7 @@ class FixtureService
      *
      * @return array
      */
-    private function fetchFixtures()
+    private function fetchFixtures(): array
     {
         $this->loader = $this->getFixtureLoader();
 
@@ -248,7 +249,7 @@ class FixtureService
      *
      * @return array
      */
-    private function fetchMigrations()
+    private function fetchMigrations(): array
     {
         if (!isset($this->migrations)) {
             return;
@@ -292,15 +293,14 @@ class FixtureService
     /**
      * Dispatch event.
      *
-     * @param \Doctrine\ORM\EntityManager $em    Entity manager
-     * @param string                      $event Event name
+     * @param \EntityManager $em    Entity manager
+     * @param string         $event Event name
      */
-    private function dispatchEvent($em, $event)
+    private function dispatchEvent(EntityManager $em, string $event)
     {
         $eventArgs = new LifecycleEventArgs(null, $em);
 
-        $em->getEventManager()
-           ->dispatchEvent($event, $eventArgs);
+        $em->getEventManager()->dispatchEvent($event, $eventArgs);
     }
 
     /**
@@ -408,7 +408,7 @@ class FixtureService
      *
      * @return string
      */
-    private function getBackupFile()
+    private function getBackupFile(): string
     {
         return $this->backupService->getBackupFile($this->getHash());
     }
@@ -416,9 +416,9 @@ class FixtureService
     /**
      * Check if there is a backup.
      *
-     * @return void
+     * @return bool
      */
-    private function hasBackup()
+    private function hasBackup(): bool
     {
         return $this->backupService->hasBackup($this->getHash());
     }

@@ -38,7 +38,7 @@ trait ReferenceDictionary
      *
      * @return FixtureService
      */
-    public function getFixtureService()
+    public function getFixtureService(): FixtureService
     {
         return $this->fixtureService;
     }
@@ -60,7 +60,7 @@ trait ReferenceDictionary
      *
      * @param string $reference
      *
-     * @return object
+     * @return bool
      */
     public function hasReference($reference)
     {

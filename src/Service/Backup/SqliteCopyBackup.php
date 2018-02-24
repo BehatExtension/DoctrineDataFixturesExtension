@@ -25,7 +25,7 @@ class SqliteCopyBackup implements BackupInterface
      *
      * @return string
      */
-    private function getDatabaseFile(array $params)
+    private function getDatabaseFile(array $params): string
     {
         if (!isset($params['path'])) {
             throw new \RuntimeException('Invalid sqlite path config');
@@ -40,7 +40,7 @@ class SqliteCopyBackup implements BackupInterface
      * @param string $source
      * @param string $dest
      */
-    public function copy($source, $dest)
+    public function copy(string $source, string $dest)
     {
         if (!copy($source, $dest)) {
             throw new \RuntimeException("Unable to copy '$source' to '$dest'");
