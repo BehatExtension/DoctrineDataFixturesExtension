@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 /*
  * The MIT License (MIT)
  *
@@ -13,7 +15,32 @@ namespace BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle\Entity;
 
 class Product
 {
+    /**
+     * @var int
+     */
     private $id;
+
+    /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @var null|string
+     */
+    private $description;
+
+    /**
+     * Product constructor.
+     *
+     * @param string      $name
+     * @param null|string $description
+     */
+    public function __construct(string $name, ?string $description = null)
+    {
+        $this->name = $name;
+        $this->description = $description;
+    }
 
     /**
      * @return int
@@ -21,5 +48,21 @@ class Product
     public function getId(): int
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getDescription(): ?string
+    {
+        return $this->description;
     }
 }

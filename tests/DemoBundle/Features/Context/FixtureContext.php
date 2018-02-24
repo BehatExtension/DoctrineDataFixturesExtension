@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 /*
  * The MIT License (MIT)
  *
@@ -11,8 +13,8 @@
 
 namespace BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle\Features\Context;
 
-use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
+use BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle\Entity\ProductManager;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 class FixtureContext implements KernelAwareContext
@@ -21,6 +23,11 @@ class FixtureContext implements KernelAwareContext
      * @var KernelInterface
      */
     private $kernel;
+
+    /**
+     * @var null|array
+     */
+    private $lines;
 
     /**
      * Sets HttpKernel instance.
@@ -38,7 +45,7 @@ class FixtureContext implements KernelAwareContext
      */
     public function iListLinesInTheEntityTable()
     {
-        throw new PendingException();
+        $this->lines = $this->kernel->getContainer()->get(ProductManager::class)->all();
     }
 
     /**
@@ -46,6 +53,8 @@ class FixtureContext implements KernelAwareContext
      */
     public function iShouldSeeRecords()
     {
-        throw new PendingException();
+        if (null === $this->lines || empty($this->lines)) {
+            throw new \RuntimeException('There is no record.');
+        }
     }
 }
