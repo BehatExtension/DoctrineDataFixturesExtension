@@ -5,11 +5,9 @@ default:
     extensions:
         Behat\Symfony2Extension: ~
         BehatExtension\DoctrineDataFixturesExtension\Extension:
-            lifetime: 'feature'
+            lifetime: 'scenario'
             autoload: true
             use_backup: true
-            directories: ~
-            fixtures: ~
     suites:
         fixtures:
             type: 'symfony_bundle'

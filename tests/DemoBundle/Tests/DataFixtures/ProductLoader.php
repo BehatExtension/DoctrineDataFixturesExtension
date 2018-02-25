@@ -11,7 +11,7 @@ declare(strict_types=1);
  * of the MIT license.  See the LICENSE file for details.
  */
 
-namespace BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle\DataFixtures\ORM;
+namespace BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle\Tests\DataFixtures;
 
 use BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle\Entity\Product;
 use Doctrine\Bundle\FixturesBundle\Fixture;

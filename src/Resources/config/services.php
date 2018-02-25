@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 use BehatExtension\DoctrineDataFixturesExtension\Context\Initializer\FixtureServiceAwareInitializer;
 use BehatExtension\DoctrineDataFixturesExtension\EventListener\HookListener;
-use BehatExtension\DoctrineDataFixturesExtension\Service\Backup\MysqlDumpBackup;
-use BehatExtension\DoctrineDataFixturesExtension\Service\Backup\SqliteCopyBackup;
-use BehatExtension\DoctrineDataFixturesExtension\Service\BackupService;
 use BehatExtension\DoctrineDataFixturesExtension\Service\FixtureService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\ref;
@@ -23,13 +20,9 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\ref;
 return function (ContainerConfigurator $container) {
     $container = $container->services()->defaults()
         ->private()
-        ->autoconfigure();
+        ->autoconfigure()
+        ->autowire();
 
-    $container->set(MysqlDumpBackup::class);
-    $container->set(SqliteCopyBackup::class);
-    $container->set(BackupService::class)
-        ->call('addBackupService', [ref(MysqlDumpBackup::class)])
-        ->call('addBackupService', [ref(SqliteCopyBackup::class)]);
     $container->set(HookListener::class)
         ->args([
             '%behat.doctrine_data_fixtures.lifetime%',
@@ -45,7 +38,6 @@ return function (ContainerConfigurator $container) {
             '%behat.doctrine_data_fixtures.fixtures%',
             '%behat.doctrine_data_fixtures.directories%',
             '%behat.doctrine_data_fixtures.use_backup%',
-            ref(BackupService::class),
         ]);
     $container->set(FixtureServiceAwareInitializer::class)
         ->args([

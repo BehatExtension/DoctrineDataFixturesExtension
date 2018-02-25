@@ -12,16 +12,24 @@ declare(strict_types=1);
  */
 
 use BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle\Entity\ProductManager;
+use BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle\Tests\DataFixtures\ProductLoader;
+use Doctrine\Bundle\FixturesBundle\ORMFixtureInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\ref;
 
 return function (ContainerConfigurator $container) {
-    $container = $container->services()->defaults()
+    $container = $container->services()
+        ->defaults()
         ->public()
-        ->autoconfigure();
+        ->autoconfigure()
+        ->autowire();
 
-    $container->set(ProductManager::class)
-        ->args([
-            ref('doctrine'),
-        ]);
+    $container
+        ->instanceof(ORMFixtureInterface::class)
+        ->tag('doctrine.fixture.orm');
+
+    $container->set(ProductManager::class);
+    $container->set(ProductLoader::class);
+    $container
+        ->alias('doctrine.fixtures.loader.alias', 'doctrine.fixtures.loader')
+        ->public();
 };

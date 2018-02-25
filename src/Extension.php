@@ -15,10 +15,13 @@ namespace BehatExtension\DoctrineDataFixturesExtension;
 
 use Behat\Testwork\ServiceContainer\Extension as ExtensionInterface;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
+use BehatExtension\DoctrineDataFixturesExtension\Service\BackupService;
+use BehatExtension\DoctrineDataFixturesExtension\Service\FixtureService;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Doctrine data fixtures extension for Behat class.
@@ -51,7 +54,12 @@ class Extension implements ExtensionInterface
             ->addDefaultsIfNotSet()
             ->children()
                 ->booleanNode('autoload')
+                    ->info('When true, the extension will load the data fixtures for all registered bundles')
                     ->defaultTrue()
+                ->end()
+                ->booleanNode('use_backup')
+                    ->info('When true, the extension will backup the database and restore it when needed')
+                    ->defaultFalse()
                 ->end()
                 ->arrayNode('directories')
                     ->defaultValue([])
@@ -72,9 +80,6 @@ class Extension implements ExtensionInterface
                         ->thenInvalid('Invalid fixtures lifetime "%s"')
                     ->end()
                 ->end()
-                ->booleanNode('use_backup')
-                    ->defaultTrue()
-                ->end()
             ->end();
     }
 
@@ -86,8 +91,12 @@ class Extension implements ExtensionInterface
         $loader = new PhpFileLoader($container, new FileLocator(__DIR__.'/Resources/config'));
         $loader->load('services.php');
 
-        $keys = ['autoload', 'directories', 'fixtures', 'lifetime', 'use_backup'];
+        $container->setParameter('behat.doctrine_data_fixtures.use_backup', $config['use_backup']);
+        if ($config['use_backup']) {
+            $loader->load('backup.php');
+        }
 
+        $keys = ['autoload', 'directories', 'fixtures', 'lifetime'];
         foreach ($keys as $key) {
             $container->setParameter('behat.doctrine_data_fixtures.'.$key, $config[$key]);
         }
@@ -98,5 +107,16 @@ class Extension implements ExtensionInterface
      */
     public function process(ContainerBuilder $container)
     {
+        //Backup Services
+        if ($container->hasDefinition(BackupService::class)) {
+            $backupService = $container->getDefinition(BackupService::class);
+            $taggedServices = $container->findTaggedServiceIds('behat.fixture_extension.backup_service');
+            foreach ($taggedServices as $id => $attributes) {
+                $backupService->addMethodCall('addBackupService', [new Reference($id)]);
+            }
+
+            $fixtureService = $container->getDefinition(FixtureService::class);
+            $fixtureService->addMethodCall('enableBackupSupport', [new Reference(BackupService::class)]);
+        }
     }
 }

@@ -69,12 +69,7 @@ class FixtureService
     private $listener;
 
     /**
-     * @var bool
-     */
-    private $useBackup;
-
-    /**
-     * @var BackupService
+     * @var null|BackupService
      */
     private $backupService;
 
@@ -90,22 +85,25 @@ class FixtureService
      * @param bool          $autoload
      * @param array         $fixtures
      * @param array         $directories
-     * @param bool          $useBackup
-     * @param BackupService $backupService
      */
-    public function __construct(Kernel $kernel, bool $autoload, array $fixtures, array $directories, bool $useBackup, BackupService $backupService)
+    public function __construct(Kernel $kernel, bool $autoload, array $fixtures, array $directories)
     {
         $this->kernel = $kernel;
         $this->autoload = $autoload;
         $this->fixtures = $fixtures;
         $this->directories = $directories;
-        $this->useBackup = $useBackup;
-        $this->loader = new Loader();
+        $this->loader = new Loader;
+    }
 
-        if ($this->useBackup) {
-            $this->backupService = $backupService;
-            $this->backupService->setCacheDir($this->kernel->getContainer()->getParameter('kernel.cache_dir'));
-        }
+    /**
+     * @param BackupService $backupService
+     *
+     * @return void
+     */
+    public function enableBackupSupport(BackupService $backupService): void
+    {
+        $this->backupService = $backupService;
+        $this->backupService->setCacheDir($this->kernel->getContainer()->getParameter('kernel.cache_dir'));
     }
 
     /**
@@ -135,23 +133,15 @@ class FixtureService
     }
 
     /**
+     * Calculate hash on data fixture class names, class file names and modification timestamps.
+     *
      * @return string
+     *
+     * @throws \ReflectionException
      */
     private function getHash(): string
     {
-        return $this->generateHash($this->fixtures);
-    }
-
-    /**
-     * Calculate hash on data fixture class names, class file names and modification timestamps.
-     *
-     * @param array $fixtures
-     *
-     * @return string
-     */
-    private function generateHash(array $fixtures): string
-    {
-        $classNames = array_map('get_class', $fixtures);
+        $classNames = array_map('get_class', $this->fixtures);
 
         foreach ($classNames as &$className) {
             $class = new \ReflectionClass($className);
@@ -243,6 +233,24 @@ class FixtureService
     }
 
     /**
+     * Fetch fixtures from Doctrine Fixtures Loader.
+     *
+     * @return void
+     */
+    private function fetchFixturesFromDoctrineLoader(): void
+    {
+        if (!$this->kernel->getContainer()->has('doctrine.fixtures.loader.alias')) {
+            return;
+        }
+        $doctrineFixtureLoader = $this->kernel->getContainer()->get('doctrine.fixtures.loader.alias');
+        foreach ($doctrineFixtureLoader->getFixtures() as $fixture) {
+            if (!$this->loader->hasFixture($fixture)) {
+                $this->loader->addFixture($fixture);
+            }
+        }
+    }
+
+    /**
      * Fetch fixtures.
      *
      * @return array
@@ -254,6 +262,7 @@ class FixtureService
         $this->fetchFixturesFromDirectories($bundleDirectories);
         $this->fetchFixturesFromDirectories($this->directories);
         $this->fetchFixturesFromClasses($this->fixtures);
+        $this->fetchFixturesFromDoctrineLoader();
 
         return $this->loader->getFixtures();
     }
@@ -290,7 +299,7 @@ class FixtureService
         $executor = new ORMExecutor($em, $purger);
         $executor->setReferenceRepository($this->getReferenceRepository());
 
-        if (!$this->useBackup) {
+        if (null === $this->backupService) {
             $executor->purge();
         }
 
@@ -336,8 +345,7 @@ class FixtureService
         $this->init();
 
         $this->fixtures = $this->fetchFixtures();
-
-        if ($this->useBackup && !$this->hasBackup()) {
+        if (!$this->hasBackup()) {
             $this->dropDatabase();
         }
     }
@@ -346,6 +354,8 @@ class FixtureService
      * Get backup file path.
      *
      * @return string
+     *
+     * @throws \ReflectionException
      */
     private function getBackupFile(): string
     {
@@ -356,9 +366,15 @@ class FixtureService
      * Check if there is a backup.
      *
      * @return bool
+     *
+     * @throws \ReflectionException
      */
     private function hasBackup(): bool
     {
+        if (null === $this->backupService) {
+            return false;
+        }
+
         return $this->backupService->hasBackup($this->getHash());
     }
 
@@ -366,9 +382,14 @@ class FixtureService
      * Create a backup for the current fixtures.
      *
      * @return void
+     *
+     * @throws \ReflectionException
      */
     private function createBackup(): void
     {
+        if (null === $this->backupService) {
+            return;
+        }
         $hash = $this->getHash();
         $connection = $this->entityManager->getConnection();
 
@@ -379,9 +400,14 @@ class FixtureService
      * Restore a backup for the current fixtures.
      *
      * @return void
+     *
+     * @throws \ReflectionException
      */
     private function restoreBackup(): void
     {
+        if (null === $this->backupService) {
+            return;
+        }
         $hash = $this->getHash();
         $connection = $this->entityManager->getConnection();
 
@@ -392,10 +418,14 @@ class FixtureService
      * Reload data fixtures.
      *
      * @return void
+     *
+     * @throws \ReflectionException
      */
     public function reloadFixtures(): void
     {
-        if (!$this->useBackup) {
+        if (null === $this->backupService) {
+            $this->dropDatabase();
+            $this->createDatabase();
             $this->loadFixtures();
 
             return;
@@ -403,9 +433,7 @@ class FixtureService
 
         if ($this->hasBackup()) {
             $this->restoreBackup();
-
-            $this->getReferenceRepository()
-                 ->load($this->getBackupFile());
+            $this->getReferenceRepository()->load($this->getBackupFile());
 
             return;
         }
@@ -414,7 +442,6 @@ class FixtureService
         $this->createDatabase();
         $this->loadFixtures();
         $this->createBackup();
-
         $this->getReferenceRepository()->save($this->getBackupFile());
     }
 

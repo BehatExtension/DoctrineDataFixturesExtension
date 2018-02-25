@@ -28,7 +28,7 @@ default:
   # ...
   extensions:
     BehatExtension\DoctrineDataFixturesExtension\Extension:
-      lifetime:    feature
+      lifetime:    'feature'
       autoload:    true
       directories: ~
       fixtures:    ~
