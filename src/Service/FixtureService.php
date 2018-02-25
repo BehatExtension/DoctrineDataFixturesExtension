@@ -33,6 +33,9 @@ use Symfony\Component\HttpKernel\Kernel;
  */
 class FixtureService
 {
+    /**
+     * @var Loader
+     */
     private $loader;
 
     /**
@@ -121,14 +124,19 @@ class FixtureService
 
     /**
      * Lazy init.
+     *
+     * @return void
      */
-    private function init()
+    private function init(): void
     {
         $this->listener = new PlatformListener();
         $this->entityManager = $this->kernel->getContainer()->get('doctrine')->getManager();
         $this->entityManager->getEventManager()->addEventSubscriber($this->listener);
     }
 
+    /**
+     * @return string
+     */
     private function getHash(): string
     {
         return $this->generateHash($this->fixtures);
@@ -180,8 +188,10 @@ class FixtureService
      * Fetch fixtures from directories.
      *
      * @param array $directoryNames
+     *
+     * @return void
      */
-    private function fetchFixturesFromDirectories(array $directoryNames)
+    private function fetchFixturesFromDirectories(array $directoryNames): void
     {
         foreach ($directoryNames as $directoryName) {
             $this->loader->loadFromDirectory($directoryName);
@@ -192,8 +202,10 @@ class FixtureService
      * Load a data fixture class.
      *
      * @param string $className Class name
+     *
+     * @return void
      */
-    private function loadFixtureClass(string $className)
+    private function loadFixtureClass(string $className): void
     {
         $fixture = new $className();
 
@@ -214,8 +226,10 @@ class FixtureService
      * Fetch fixtures from classes.
      *
      * @param array $classNames
+     *
+     * @return void
      */
-    private function fetchFixturesFromClasses(array $classNames)
+    private function fetchFixturesFromClasses(array $classNames): void
     {
         foreach ($classNames as $className) {
             if (substr($className, 0, 1) !== '\\') {
@@ -249,8 +263,10 @@ class FixtureService
      *
      * @param EntityManager $em    Entity manager
      * @param string        $event Event name
+     *
+     * @return void
      */
-    private function dispatchEvent(EntityManager $em, string $event)
+    private function dispatchEvent(EntityManager $em, string $event): void
     {
         $eventArgs = new LifecycleEventArgs(null, $em);
 
@@ -259,8 +275,10 @@ class FixtureService
 
     /**
      * Load fixtures into database.
+     *
+     * @return void
      */
-    private function loadFixtures()
+    private function loadFixtures(): void
     {
         $em = $this->entityManager;
 
@@ -285,8 +303,10 @@ class FixtureService
      * Create database using doctrine schema tool.
      *
      * @throws \Doctrine\ORM\Tools\ToolsException
+     *
+     * @return void
      */
-    private function createDatabase()
+    private function createDatabase(): void
     {
         $em = $this->entityManager;
         $metadata = $em->getMetadataFactory()->getAllMetadata();
@@ -297,8 +317,10 @@ class FixtureService
 
     /**
      * Drop database using doctrine schema tool.
+     *
+     * @return void
      */
-    private function dropDatabase()
+    private function dropDatabase(): void
     {
         $schemaTool = new SchemaTool($this->entityManager);
         $schemaTool->dropDatabase();
@@ -306,8 +328,10 @@ class FixtureService
 
     /**
      * Cache data fixtures.
+     *
+     * @return void
      */
-    public function cacheFixtures()
+    public function cacheFixtures(): void
     {
         $this->init();
 
@@ -340,8 +364,10 @@ class FixtureService
 
     /**
      * Create a backup for the current fixtures.
+     *
+     * @return void
      */
-    private function createBackup()
+    private function createBackup(): void
     {
         $hash = $this->getHash();
         $connection = $this->entityManager->getConnection();
@@ -351,8 +377,10 @@ class FixtureService
 
     /**
      * Restore a backup for the current fixtures.
+     *
+     * @return void
      */
-    private function restoreBackup()
+    private function restoreBackup(): void
     {
         $hash = $this->getHash();
         $connection = $this->entityManager->getConnection();
@@ -362,8 +390,10 @@ class FixtureService
 
     /**
      * Reload data fixtures.
+     *
+     * @return void
      */
-    public function reloadFixtures()
+    public function reloadFixtures(): void
     {
         if (!$this->useBackup) {
             $this->loadFixtures();
@@ -390,8 +420,10 @@ class FixtureService
 
     /**
      * Flush entity manager.
+     *
+     * @return void
      */
-    public function flush()
+    public function flush(): void
     {
         $em = $this->entityManager;
         $em->flush();

@@ -56,7 +56,7 @@ class MysqlDumpBackup implements BackupInterface
     /**
      * {@inheritdoc}
      */
-    public function create(string $database, string $file, array $params)
+    public function create(string $database, string $file, array $params): void
     {
         $command = sprintf('%s %s > %s', $this->mysqldumpBin, escapeshellarg($database), escapeshellarg($file));
 
@@ -82,7 +82,7 @@ class MysqlDumpBackup implements BackupInterface
     /**
      * {@inheritdoc}
      */
-    public function restore(string $database, string $file, array $params)
+    public function restore(string $database, string $file, array $params): void
     {
         $command = sprintf('%s %s < %s', $this->mysqlBin, escapeshellarg($database), escapeshellarg($file));
 

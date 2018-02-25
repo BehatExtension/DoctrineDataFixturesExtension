@@ -41,9 +41,11 @@ class PlatformListener implements EventSubscriber
      *
      * @param LifecycleEventArgs $args
      *
+     * @return void
+     *
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function preTruncate(LifecycleEventArgs $args)
+    public function preTruncate(LifecycleEventArgs $args): void
     {
         $objectManager = $args->getObjectManager();
         if (!$objectManager instanceof EntityManagerInterface) {
@@ -63,9 +65,11 @@ class PlatformListener implements EventSubscriber
      *
      * @param LifecycleEventArgs $args
      *
+     * @return void
+     *
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function postTruncate(LifecycleEventArgs $args)
+    public function postTruncate(LifecycleEventArgs $args): void
     {
         $objectManager = $args->getObjectManager();
         if (!$objectManager instanceof EntityManagerInterface) {

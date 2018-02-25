@@ -29,8 +29,10 @@ trait ReferenceDictionary
      * Sets the Reference Repository.
      *
      * @param FixtureService $service
+     *
+     * @return void
      */
-    public function setFixtureService(FixtureService $service)
+    public function setFixtureService(FixtureService $service): void
     {
         $this->fixtureService = $service;
     }
@@ -64,7 +66,7 @@ trait ReferenceDictionary
      *
      * @return bool
      */
-    public function hasReference($reference)
+    public function hasReference($reference): bool
     {
         return $this->fixtureService->getReferenceRepository()->hasReference($reference);
     }

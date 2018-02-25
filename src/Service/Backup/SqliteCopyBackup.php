@@ -60,7 +60,7 @@ class SqliteCopyBackup implements BackupInterface
     /**
      * {@inheritdoc}
      */
-    public function create(string $database, string $file, array $params)
+    public function create(string $database, string $file, array $params): void
     {
         $this->copy($this->getDatabaseFile($params), $file);
     }
@@ -68,7 +68,7 @@ class SqliteCopyBackup implements BackupInterface
     /**
      * {@inheritdoc}
      */
-    public function restore(string $database, string $file, array $params)
+    public function restore(string $database, string $file, array $params): void
     {
         $this->copy($file, $this->getDatabaseFile($params));
     }

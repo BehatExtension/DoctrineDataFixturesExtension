@@ -24,6 +24,8 @@ interface FixtureServiceAwareContextInterface
      * Set the FixtureService.
      *
      * @param FixtureService $service
+     *
+     * @return void
      */
-    public function setFixtureService(FixtureService $service);
+    public function setFixtureService(FixtureService $service): void;
 }

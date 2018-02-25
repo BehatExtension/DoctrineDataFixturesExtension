@@ -31,8 +31,10 @@ interface BackupInterface
      * @param string $database
      * @param string $file
      * @param array  $params
+     *
+     * @return void
      */
-    public function create(string $database, string $file, array $params);
+    public function create(string $database, string $file, array $params): void;
 
     /**
      * Restore the backup file into the given database.
@@ -40,6 +42,8 @@ interface BackupInterface
      * @param string $database
      * @param string $file
      * @param array  $params
+     *
+     * @return void
      */
-    public function restore(string $database, string $file, array $params);
+    public function restore(string $database, string $file, array $params): void;
 }

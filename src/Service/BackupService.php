@@ -35,16 +35,20 @@ class BackupService
 
     /**
      * @param string $cacheDir
+     *
+     * @return void
      */
-    public function setCacheDir(string $cacheDir)
+    public function setCacheDir(string $cacheDir): void
     {
         $this->cacheDir = $cacheDir;
     }
 
     /**
      * @param BackupInterface $backup
+     *
+     * @return void
      */
-    public function addBackupService(BackupInterface $backup)
+    public function addBackupService(BackupInterface $backup): void
     {
         $this->platformBackupMap[$backup->name()] = $backup;
     }
@@ -102,8 +106,10 @@ class BackupService
      *
      * @param Connection $connection
      * @param string     $hash
+     *
+     * @return void
      */
-    public function createBackup(Connection $connection, string $hash)
+    public function createBackup(Connection $connection, string $hash): void
     {
         $platformName = $connection->getDatabasePlatform()->getName();
         $filename = $this->getBackupFile($hash);
@@ -118,8 +124,10 @@ class BackupService
      *
      * @param Connection $connection
      * @param string     $hash
+     *
+     * @return void
      */
-    public function restoreBackup(Connection $connection, string $hash)
+    public function restoreBackup(Connection $connection, string $hash): void
     {
         $platformName = $connection->getDatabasePlatform()->getName();
         $filename = $this->getBackupFile($hash);
