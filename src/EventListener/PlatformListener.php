@@ -41,9 +41,9 @@ class PlatformListener implements EventSubscriber
      *
      * @param LifecycleEventArgs $args
      *
-     * @return void
-     *
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return void
      */
     public function preTruncate(LifecycleEventArgs $args): void
     {
@@ -65,9 +65,9 @@ class PlatformListener implements EventSubscriber
      *
      * @param LifecycleEventArgs $args
      *
-     * @return void
-     *
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return void
      */
     public function postTruncate(LifecycleEventArgs $args): void
     {
