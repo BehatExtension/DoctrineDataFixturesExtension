@@ -14,7 +14,7 @@ declare(strict_types=1);
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
-class AppKernel extends Kernel
+final class AppKernel extends Kernel
 {
     /**
      * {@inheritdoc}

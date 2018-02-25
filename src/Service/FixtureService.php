@@ -44,12 +44,12 @@ class FixtureService
     private $autoload;
 
     /**
-     * @var array
+     * @var string[]
      */
     private $fixtures;
 
     /**
-     * @var array
+     * @var string[]
      */
     private $directories;
 
@@ -81,10 +81,10 @@ class FixtureService
     /**
      * FixtureService constructor.
      *
-     * @param Kernel $kernel
-     * @param bool   $autoload
-     * @param array  $fixtures
-     * @param array  $directories
+     * @param Kernel   $kernel
+     * @param bool     $autoload
+     * @param string[] $fixtures
+     * @param string[] $directories
      */
     public function __construct(Kernel $kernel, bool $autoload, array $fixtures, array $directories)
     {

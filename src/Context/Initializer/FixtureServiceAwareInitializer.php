@@ -21,7 +21,7 @@ use BehatExtension\DoctrineDataFixturesExtension\Service\FixtureService;
 /**
  * Class FixtureServiceAwareInitializer.
  */
-class FixtureServiceAwareInitializer implements ContextInitializer
+final class FixtureServiceAwareInitializer implements ContextInitializer
 {
     /**
      * @var FixtureService

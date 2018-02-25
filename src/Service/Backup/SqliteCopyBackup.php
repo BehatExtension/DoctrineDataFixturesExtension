@@ -18,7 +18,7 @@ namespace BehatExtension\DoctrineDataFixturesExtension\Service\Backup;
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class SqliteCopyBackup implements BackupInterface
+final class SqliteCopyBackup implements BackupInterface
 {
     /**
      * {@inheritdoc}
@@ -50,7 +50,7 @@ class SqliteCopyBackup implements BackupInterface
      * @param string $source
      * @param string $dest
      */
-    public function copy(string $source, string $dest)
+    private function copy(string $source, string $dest)
     {
         if (!copy($source, $dest)) {
             throw new \RuntimeException("Unable to copy '$source' to '$dest'");

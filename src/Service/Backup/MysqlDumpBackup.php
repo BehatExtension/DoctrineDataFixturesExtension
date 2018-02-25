@@ -20,7 +20,7 @@ use Symfony\Component\Process\Process;
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class MysqlDumpBackup implements BackupInterface
+final class MysqlDumpBackup implements BackupInterface
 {
     /**
      * @var string
@@ -47,7 +47,7 @@ class MysqlDumpBackup implements BackupInterface
      *
      * @return int
      */
-    protected function runCommand(string $command): int
+    private function runCommand(string $command): int
     {
         $process = new Process($command);
 

@@ -1,7 +1,6 @@
 BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle\Entity\Product:
     type: 'entity'
     table: 'products'
-    repositoryClass: 'BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle\Entity\ProductRepository'
     id:
         id:
             type: 'integer'

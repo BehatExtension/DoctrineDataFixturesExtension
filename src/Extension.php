@@ -28,7 +28,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @author Anthon Pang <apang@softwaredevelopment.ca>
  */
-class Extension implements ExtensionInterface
+final class Extension implements ExtensionInterface
 {
     /**
      * {@inheritdoc}
@@ -59,7 +59,7 @@ class Extension implements ExtensionInterface
                 ->end()
                 ->booleanNode('use_backup')
                     ->info('When true, the extension will backup the database and restore it when needed')
-                    ->defaultFalse()
+                    ->defaultTrue()
                 ->end()
                 ->arrayNode('directories')
                     ->defaultValue([])

@@ -20,7 +20,7 @@ use Symfony\Component\Process\Process;
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class PostgresqlDumpBackup implements BackupInterface
+final class PostgresqlDumpBackup implements BackupInterface
 {
     /**
      * @var string
