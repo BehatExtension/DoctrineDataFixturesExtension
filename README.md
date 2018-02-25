@@ -53,26 +53,41 @@ default:
   # ...
   extensions:
     BehatExtension\DoctrineDataFixturesExtension\Extension:
-      lifetime: feature
+      lifetime: 'feature'
       autoload: true
       directories:
-        - /project/src/AcmeAnalytics/Tests/DataFixtures/ORM
+        - '/project/src/AcmeAnalytics/Tests/DataFixtures/ORM'
       fixtures:
-        - Acme\StoreBundle\DataFixture\ORM\Categories
-        - Acme\StoreBundle\DataFixture\ORM\Apps
-        - Acme\VendorBundle\DataFixture\ORM\Vendors
+        - 'Acme\StoreBundle\DataFixture\ORM\Categories'
+        - 'Acme\StoreBundle\DataFixture\ORM\Apps'
+        - 'Acme\VendorBundle\DataFixture\ORM\Vendors'
 ```
 
-# Limitations
+# Backup System
 
-When using the SqlLiteDriver, the .db file is cached to speed up reloading. 
+To speed up the tests, a backup system is available. The whole database will be set in cache and reloaded when needed.
 You should periodically clear the cache as it does not detect changes to the data fixture contents because the hash is based on the collection of data fixture class names.
+
+This feature is only available for the following SGDB: SQLite, MySQL, PostgreSQL.
+
+To enable it, you just have to set `use_backup: true` in the extension configuration:
+
+```yaml
+# behat.yml
+default:
+  # ...
+  extensions:
+    BehatExtension\DoctrineDataFixturesExtension\Extension:
+      lifetime: 'feature'
+      autoload: true
+      use_backup: true
+```
 
 # Source
 
 Github: [https://github.com/BehatExtension/DoctrineDataFixturesExtension](https://github.com/BehatExtension/DoctrineDataFixturesExtension)
 
-Forked from Github [https://github.com/vipsoft/DoctrineDataFixturesExtension](https://github.com/vipsoft/DoctrineDataFixturesExtension)
+Forked from [https://github.com/vipsoft/DoctrineDataFixturesExtension](https://github.com/vipsoft/DoctrineDataFixturesExtension)
 
 # Copyright
 
@@ -84,4 +99,5 @@ See [LICENSE](LICENSE) for details.
 # Contributors
 
 * Anthon Pang ([robocoder](http://github.com/robocoder))
+* Florent Morselli ([Spomky](http://github.com/Spomky))
 * [Others contributors](https://github.com/BehatExtension/DoctrineDataFixturesExtension/graphs/contributors)
