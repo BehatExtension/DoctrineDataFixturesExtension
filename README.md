@@ -38,8 +38,10 @@ When **lifetime** is set to "feature" (or unspecified), data fixtures are reload
 when **lifetime** is set to "scenario", data fixtures are reloaded between scenarios (i.e., increased
 test isolation at the expense of increased run time).
 
-When **autoload** is true, the DoctrineDataFixtures extension will load the data fixtures for all
-registered bundles (similar to `app/console doctrine:fixtures:load`).
+When **autoload** is true, the extension will load the data fixtures for registered bundles.
+Please note that only fixtures stored in the folder `/DataFixtures/ORM` of the bundles are loaded.
+If you want to load fixtures tagged with `doctrine.fixture.orm`, you must enable the bundle `BehatExtension\DoctrineDataFixturesExtension\Bundle\BehatDoctrineDataFixturesExtensionBundle`
+in your test `AppKernel` class.
 
 When **fixtures** is set, the DoctrineDataFixtures extension will load the specified fixture classes.
 
