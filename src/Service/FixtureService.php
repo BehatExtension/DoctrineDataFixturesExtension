@@ -81,10 +81,10 @@ class FixtureService
     /**
      * FixtureService constructor.
      *
-     * @param Kernel        $kernel
-     * @param bool          $autoload
-     * @param array         $fixtures
-     * @param array         $directories
+     * @param Kernel $kernel
+     * @param bool   $autoload
+     * @param array  $fixtures
+     * @param array  $directories
      */
     public function __construct(Kernel $kernel, bool $autoload, array $fixtures, array $directories)
     {
@@ -92,7 +92,7 @@ class FixtureService
         $this->autoload = $autoload;
         $this->fixtures = $fixtures;
         $this->directories = $directories;
-        $this->loader = new Loader;
+        $this->loader = new Loader();
     }
 
     /**
@@ -135,9 +135,9 @@ class FixtureService
     /**
      * Calculate hash on data fixture class names, class file names and modification timestamps.
      *
-     * @return string
-     *
      * @throws \ReflectionException
+     *
+     * @return string
      */
     private function getHash(): string
     {
@@ -353,9 +353,9 @@ class FixtureService
     /**
      * Get backup file path.
      *
-     * @return string
-     *
      * @throws \ReflectionException
+     *
+     * @return string
      */
     private function getBackupFile(): string
     {
@@ -365,9 +365,9 @@ class FixtureService
     /**
      * Check if there is a backup.
      *
-     * @return bool
-     *
      * @throws \ReflectionException
+     *
+     * @return bool
      */
     private function hasBackup(): bool
     {
@@ -381,9 +381,9 @@ class FixtureService
     /**
      * Create a backup for the current fixtures.
      *
-     * @return void
-     *
      * @throws \ReflectionException
+     *
+     * @return void
      */
     private function createBackup(): void
     {
@@ -399,9 +399,9 @@ class FixtureService
     /**
      * Restore a backup for the current fixtures.
      *
-     * @return void
-     *
      * @throws \ReflectionException
+     *
+     * @return void
      */
     private function restoreBackup(): void
     {
@@ -417,9 +417,9 @@ class FixtureService
     /**
      * Reload data fixtures.
      *
-     * @return void
-     *
      * @throws \ReflectionException
+     *
+     * @return void
      */
     public function reloadFixtures(): void
     {

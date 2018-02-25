@@ -11,9 +11,9 @@ declare(strict_types=1);
  * of the MIT license.  See the LICENSE file for details.
  */
 
+use BehatExtension\DoctrineDataFixturesExtension\Service\Backup\BackupInterface;
 use BehatExtension\DoctrineDataFixturesExtension\Service\Backup\MysqlDumpBackup;
 use BehatExtension\DoctrineDataFixturesExtension\Service\Backup\SqliteCopyBackup;
-use BehatExtension\DoctrineDataFixturesExtension\Service\Backup\BackupInterface;
 use BehatExtension\DoctrineDataFixturesExtension\Service\BackupService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
