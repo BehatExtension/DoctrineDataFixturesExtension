@@ -43,9 +43,9 @@ class PostgresqlDumpBackup implements BackupInterface
     /**
      * @param string $command
      *
-     * @return int
-     *
      * @throws \RuntimeException
+     *
+     * @return int
      */
     private function runCommand($command)
     {
@@ -88,7 +88,7 @@ class PostgresqlDumpBackup implements BackupInterface
         );
 
         if (isset($params['password']) && strlen($params['password'])) {
-            $command = sprintf('PGPASSWORD=%s ', escapeshellarg($params['password'])) . $command;
+            $command = sprintf('PGPASSWORD=%s ', escapeshellarg($params['password'])).$command;
         }
 
         $this->runCommand($command);
@@ -122,7 +122,7 @@ class PostgresqlDumpBackup implements BackupInterface
         );
 
         if (isset($params['password']) && strlen($params['password'])) {
-            $command = sprintf('PGPASSWORD=%s ', escapeshellarg($params['password'])) . $command;
+            $command = sprintf('PGPASSWORD=%s ', escapeshellarg($params['password'])).$command;
         }
 
         $this->runCommand($command);
