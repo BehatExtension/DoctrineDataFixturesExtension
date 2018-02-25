@@ -12,8 +12,7 @@ declare(strict_types=1);
  */
 
 use BehatExtension\DoctrineDataFixturesExtension\Service\Backup\BackupInterface;
-use BehatExtension\DoctrineDataFixturesExtension\Service\Backup\MysqlDumpBackup;
-use BehatExtension\DoctrineDataFixturesExtension\Service\Backup\SqliteCopyBackup;
+use BehatExtension\DoctrineDataFixturesExtension\Service\Backup\{MysqlDumpBackup,PostgresqlDumpBackup,SqliteCopyBackup};
 use BehatExtension\DoctrineDataFixturesExtension\Service\BackupService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -29,5 +28,6 @@ return function (ContainerConfigurator $container) {
 
     $container->set(MysqlDumpBackup::class);
     $container->set(SqliteCopyBackup::class);
+    $container->set(PostgresqlDumpBackup::class);
     $container->set(BackupService::class);
 };

@@ -20,34 +20,34 @@ use Symfony\Component\Process\Process;
  *
  * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
  */
-class MysqlDumpBackup implements BackupInterface
+class PostgresqlDumpBackup implements BackupInterface
 {
     /**
      * @var string
      */
-    private $mysqldumpBin = 'mysqldump';
+    private $pgRestore = 'pg_restore';
 
     /**
      * @var string
      */
-    private $mysqlBin = 'mysql';
+    private $pgDump = 'pg_dump';
 
     /**
      * {@inheritdoc}
      */
     public function name(): string
     {
-        return 'mysql';
+        return 'postgresql';
     }
 
     /**
      * @param string $command
      *
-     * @throws \RuntimeException
-     *
      * @return int
+     *
+     * @throws \RuntimeException
      */
-    protected function runCommand(string $command): int
+    private function runCommand($command)
     {
         $process = new Process($command);
 
@@ -65,22 +65,30 @@ class MysqlDumpBackup implements BackupInterface
      */
     public function create(string $database, string $file, array $params): void
     {
-        $command = sprintf('%s %s > %s', $this->mysqldumpBin, escapeshellarg($database), escapeshellarg($file));
+        $options = '';
 
         if (isset($params['host']) && strlen($params['host'])) {
-            $command .= sprintf(' --host=%s', escapeshellarg($params['host']));
+            $options .= sprintf(' --host=%s', escapeshellarg($params['host']));
         }
 
         if (isset($params['user']) && strlen($params['user'])) {
-            $command .= sprintf(' --user=%s', escapeshellarg($params['user']));
-        }
-
-        if (isset($params['password']) && strlen($params['password'])) {
-            $command .= sprintf(' --password=%s', escapeshellarg($params['password']));
+            $options .= sprintf(' --username=%s', escapeshellarg($params['user']));
         }
 
         if (isset($params['port'])) {
-            $command .= sprintf(' -P%s', escapeshellarg($params['port']));
+            $options .= sprintf(' --port=%s', escapeshellarg($params['port']));
+        }
+
+        $command = sprintf(
+            '%s -Fc %s %s > %s',
+            $this->pgDump,
+            $options,
+            escapeshellarg($database),
+            escapeshellarg($file)
+        );
+
+        if (isset($params['password']) && strlen($params['password'])) {
+            $command = sprintf('PGPASSWORD=%s ', escapeshellarg($params['password'])) . $command;
         }
 
         $this->runCommand($command);
@@ -91,22 +99,30 @@ class MysqlDumpBackup implements BackupInterface
      */
     public function restore(string $database, string $file, array $params): void
     {
-        $command = sprintf('%s %s < %s', $this->mysqlBin, escapeshellarg($database), escapeshellarg($file));
+        $options = '';
 
         if (isset($params['host']) && strlen($params['host'])) {
-            $command .= sprintf(' --host=%s', escapeshellarg($params['host']));
+            $options .= sprintf(' --host=%s', escapeshellarg($params['host']));
         }
 
         if (isset($params['user']) && strlen($params['user'])) {
-            $command .= sprintf(' --user=%s', escapeshellarg($params['user']));
-        }
-
-        if (isset($params['password']) && strlen($params['password'])) {
-            $command .= sprintf(' --password=%s', escapeshellarg($params['password']));
+            $options .= sprintf(' --username=%s', escapeshellarg($params['user']));
         }
 
         if (isset($params['port'])) {
-            $command .= sprintf(' -P%s', escapeshellarg($params['port']));
+            $options .= sprintf(' --port=%s', escapeshellarg($params['port']));
+        }
+
+        $command = sprintf(
+            '%s --clean %s --dbname=%s %s',
+            $this->pgRestore,
+            $options,
+            escapeshellarg($database),
+            escapeshellarg($file)
+        );
+
+        if (isset($params['password']) && strlen($params['password'])) {
+            $command = sprintf('PGPASSWORD=%s ', escapeshellarg($params['password'])) . $command;
         }
 
         $this->runCommand($command);
