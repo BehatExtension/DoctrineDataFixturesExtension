@@ -25,8 +25,7 @@ final class BehatDoctrineDataFixturesExtensionBundle extends Bundle
      */
     public function getContainerExtension()
     {
-        return new class extends Extension
-        {
+        return new class() extends Extension {
             public function load(array $configs, ContainerBuilder $container)
             {
                 $container->setAlias('doctrine.fixtures.loader.alias', new Alias('doctrine.fixtures.loader', true));
