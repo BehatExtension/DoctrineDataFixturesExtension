@@ -88,6 +88,9 @@ class FixtureService
      */
     public function __construct(Kernel $kernel, bool $autoload, array $fixtures, array $directories)
     {
+        if (!in_array('BehatDoctrineDataFixturesExtensionBundle', array_keys($kernel->getBundles()))) {
+            throw new \RuntimeException('Please enable the BehatExtensionDoctrineDataFixturesExtensionBundle to use this extension');
+        }
         $this->kernel = $kernel;
         $this->autoload = $autoload;
         $this->fixtures = $fixtures;

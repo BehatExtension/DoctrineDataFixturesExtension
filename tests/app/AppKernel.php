@@ -26,6 +26,7 @@ class AppKernel extends Kernel
             new BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle\DemoBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
+            new BehatExtension\DoctrineDataFixturesExtension\Bundle\BehatDoctrineDataFixturesExtensionBundle()
         ];
 
         return $bundles;
