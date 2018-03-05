@@ -2,12 +2,9 @@ BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle\Entity\Product:
     type: 'entity'
     table: 'products'
     id:
-        id:
-            type: 'integer'
-            generator: { strategy: AUTO }
-    fields:
         name:
             type: 'string'
+    fields:
         description:
             type: 'string'
             nullable: true

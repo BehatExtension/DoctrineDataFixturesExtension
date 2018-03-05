@@ -17,6 +17,7 @@ use BehatExtension\DoctrineDataFixturesExtension\Service\Backup\PostgresqlDumpBa
 use BehatExtension\DoctrineDataFixturesExtension\Service\Backup\SqliteCopyBackup;
 use BehatExtension\DoctrineDataFixturesExtension\Service\BackupService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Component\Process\Process;
 
 return function (ContainerConfigurator $container) {
     $container = $container->services()->defaults()
@@ -28,8 +29,10 @@ return function (ContainerConfigurator $container) {
         ->instanceof(BackupInterface::class)
         ->tag('behat.fixture_extension.backup_service');
 
-    $container->set(MysqlDumpBackup::class);
+    if (class_exists(Process::class)) {
+        $container->set(MysqlDumpBackup::class);
+        $container->set(PostgresqlDumpBackup::class);
+    }
     $container->set(SqliteCopyBackup::class);
-    $container->set(PostgresqlDumpBackup::class);
     $container->set(BackupService::class);
 };

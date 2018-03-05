@@ -21,6 +21,8 @@ namespace BehatExtension\DoctrineDataFixturesExtension\Service\Backup;
 interface BackupInterface
 {
     /**
+     * The name of the platform supported by the backup.
+     *
      * @return string
      */
     public function name(): string;

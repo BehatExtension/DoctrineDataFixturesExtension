@@ -108,15 +108,16 @@ final class Extension implements ExtensionInterface
     public function process(ContainerBuilder $container)
     {
         //Backup Services
-        if ($container->hasDefinition(BackupService::class)) {
-            $backupService = $container->getDefinition(BackupService::class);
-            $taggedServices = $container->findTaggedServiceIds('behat.fixture_extension.backup_service');
-            foreach ($taggedServices as $id => $attributes) {
-                $backupService->addMethodCall('addBackupService', [new Reference($id)]);
-            }
-
-            $fixtureService = $container->getDefinition(FixtureService::class);
-            $fixtureService->addMethodCall('enableBackupSupport', [new Reference(BackupService::class)]);
+        if (!$container->hasDefinition(BackupService::class)) {
+            return;
         }
+        $backupService = $container->getDefinition(BackupService::class);
+        $taggedServices = $container->findTaggedServiceIds('behat.fixture_extension.backup_service');
+        foreach ($taggedServices as $id => $attributes) {
+            $backupService->addMethodCall('addBackupService', [new Reference($id)]);
+        }
+
+        $fixtureService = $container->getDefinition(FixtureService::class);
+        $fixtureService->addMethodCall('enableBackupSupport', [new Reference(BackupService::class)]);
     }
 }

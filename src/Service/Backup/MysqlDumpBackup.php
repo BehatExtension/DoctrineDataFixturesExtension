@@ -45,9 +45,9 @@ final class MysqlDumpBackup implements BackupInterface
      *
      * @throws \RuntimeException
      *
-     * @return int
+     * @return null|int
      */
-    private function runCommand(string $command): int
+    private function runCommand(string $command): ?int
     {
         $process = new Process($command);
 

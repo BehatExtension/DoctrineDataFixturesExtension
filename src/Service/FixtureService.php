@@ -20,6 +20,7 @@ use Doctrine\Common\DataFixtures\Loader;
 use Doctrine\Common\DataFixtures\ProxyReferenceRepository;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
@@ -127,8 +128,15 @@ class FixtureService
      */
     private function init(): void
     {
+        if (!$this->kernel->getContainer()->has('doctrine')) {
+            throw new \RuntimeException('Unable to get Doctrine');
+        }
+        $doctrine = $this->kernel->getContainer()->get('doctrine');
+        if (!$doctrine instanceof ManagerRegistry) {
+            throw new \RuntimeException('Unable to get Doctrine');
+        }
         $this->listener = new PlatformListener();
-        $this->entityManager = $this->kernel->getContainer()->get('doctrine')->getManager();
+        $this->entityManager = $doctrine->getManager();
         $this->entityManager->getEventManager()->addEventSubscriber($this->listener);
     }
 

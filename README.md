@@ -70,7 +70,7 @@ You should periodically clear the cache as it does not detect changes to the dat
 
 This feature is only available for the following SGDB: SQLite, MySQL, PostgreSQL.
 
-To enable it, you just have to set `use_backup: true` in the extension configuration:
+It is enabled by default. To disable it, you just have to set `use_backup: false` in the extension configuration:
 
 ```yaml
 # behat.yml
@@ -80,7 +80,7 @@ default:
     BehatExtension\DoctrineDataFixturesExtension\Extension:
       lifetime: 'feature'
       autoload: true
-      use_backup: true
+      use_backup: false
 ```
 
 # Source

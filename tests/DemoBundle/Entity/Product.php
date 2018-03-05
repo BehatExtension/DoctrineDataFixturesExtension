@@ -16,11 +16,6 @@ namespace BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle\Entity;
 class Product
 {
     /**
-     * @var int
-     */
-    private $id;
-
-    /**
      * @var string
      */
     private $name;
@@ -40,14 +35,6 @@ class Product
     {
         $this->name = $name;
         $this->description = $description;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
     }
 
     /**
