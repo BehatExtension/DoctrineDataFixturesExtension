@@ -61,18 +61,6 @@ final class Extension implements ExtensionInterface
                     ->info('When true, the extension will backup the database and restore it when needed')
                     ->defaultTrue()
                 ->end()
-                ->arrayNode('directories')
-                    ->defaultValue([])
-                    ->treatFalseLike([])
-                    ->treatNullLike([])
-                    ->scalarPrototype()->end()
-                ->end()
-                ->arrayNode('fixtures')
-                    ->defaultValue([])
-                    ->treatFalseLike([])
-                    ->treatNullLike([])
-                    ->scalarPrototype()->end()
-                ->end()
                 ->scalarNode('lifetime')
                     ->defaultValue('feature')
                     ->validate()
@@ -91,12 +79,11 @@ final class Extension implements ExtensionInterface
         $loader = new PhpFileLoader($container, new FileLocator(__DIR__.'/Resources/config'));
         $loader->load('services.php');
 
-        $container->setParameter('behat.doctrine_data_fixtures.use_backup', $config['use_backup']);
         if ($config['use_backup']) {
             $loader->load('backup.php');
         }
 
-        $keys = ['autoload', 'directories', 'fixtures', 'lifetime'];
+        $keys = ['autoload', 'lifetime', 'use_backup'];
         foreach ($keys as $key) {
             $container->setParameter('behat.doctrine_data_fixtures.'.$key, $config[$key]);
         }

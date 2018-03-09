@@ -30,8 +30,6 @@ default:
     BehatExtension\DoctrineDataFixturesExtension\Extension:
       lifetime:    'feature'
       autoload:    true
-      directories: ~
-      fixtures:    ~
 ```
 
 When **lifetime** is set to "feature" (or unspecified), data fixtures are reloaded between feature files.  Alternately,
@@ -42,26 +40,6 @@ When **autoload** is true, the extension will load the data fixtures for registe
 Please note that only fixtures stored in the folder `/DataFixtures/ORM` of the bundles are loaded.
 If you want to load fixtures tagged with `doctrine.fixture.orm`, you must enable the bundle `BehatExtension\DoctrineDataFixturesExtension\Bundle\BehatDoctrineDataFixturesExtensionBundle`
 in your test `AppKernel` class.
-
-When **fixtures** is set, the DoctrineDataFixtures extension will load the specified fixture classes.
-
-When **directories** is set, the DoctrineDataFixtures extension will load the data fixtures globed from the respective directories.
-
-```yaml
-# behat.yml
-default:
-  # ...
-  extensions:
-    BehatExtension\DoctrineDataFixturesExtension\Extension:
-      lifetime: 'feature'
-      autoload: true
-      directories:
-        - '/project/src/AcmeAnalytics/Tests/DataFixtures/ORM'
-      fixtures:
-        - 'Acme\StoreBundle\DataFixture\ORM\Categories'
-        - 'Acme\StoreBundle\DataFixture\ORM\Apps'
-        - 'Acme\VendorBundle\DataFixture\ORM\Vendors'
-```
 
 # Backup System
 
