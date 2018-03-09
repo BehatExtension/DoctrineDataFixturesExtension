@@ -78,7 +78,7 @@ final class Extension implements ExtensionInterface
     {
         $loader = new PhpFileLoader($container, new FileLocator(__DIR__.'/Resources/config'));
         $loader->load('services.php');
-        
+
         if ($config['use_backup']) {
             $loader->load('backup.php');
         }
