@@ -43,7 +43,7 @@ final class FixtureServiceAwareInitializer implements ContextInitializer
      */
     public function initializeContext(Context $context)
     {
-        if (!$context instanceof FixtureServiceAwareContextInterface || !$this->usesReferenceDictionary($context)) {
+        if (!$context instanceof FixtureServiceAwareContextInterface && !$this->usesReferenceDictionary($context)) {
             return;
         }
 
