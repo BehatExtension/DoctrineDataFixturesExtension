@@ -28,7 +28,8 @@
         "doctrine/doctrine-bundle": "^1.8",
         "doctrine/doctrine-fixtures-bundle": "^3.0",
         "symfony/process": "^3.4|^4.0",
-        "adamquaile/behat-command-runner-extension": "^0.1.1"
+        "adamquaile/behat-command-runner-extension": "^0.1.1",
+        "symfony/var-dumper": "^3.4|^4.0"
     },
     "suggest": {
         "doctrine/migrations": "Uses DBAL to load versioned database schema and migration classes",

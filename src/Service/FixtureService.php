@@ -16,7 +16,6 @@ namespace BehatExtension\DoctrineDataFixturesExtension\Service;
 use BehatExtension\DoctrineDataFixturesExtension\EventListener\PlatformListener;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
-use Doctrine\Common\DataFixtures\Loader;
 use Doctrine\Common\DataFixtures\ProxyReferenceRepository;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
@@ -93,7 +92,7 @@ class FixtureService
         $this->autoload = $autoload;
         $this->fixtures = $fixtures;
         $this->directories = $directories;
-        $this->loader = new Loader();
+        $this->loader = new Loader($kernel->getContainer());
     }
 
     /**

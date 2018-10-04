@@ -12,9 +12,6 @@ declare(strict_types=1);
  */
 
 use BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle\Entity\ProductManager;
-use BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle\Tests\DataFixtures\ProductLoader;
-use BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle\Tests\DataFixtures\ProductLoaderContainerAware;
-use BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle\Tests\DataFixtures\ProductLoaderWithDependencyInjection;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\ref;
 
@@ -25,11 +22,10 @@ return function (ContainerConfigurator $container) {
         ->autoconfigure()
         ->autowire();
 
-    $container->set(ProductManager::class)
-        ->args([
-            ref('doctrine'),
-        ]);
-    $container->set(ProductLoader::class);
-    $container->set(ProductLoaderContainerAware::class);
-    $container->set(ProductLoaderWithDependencyInjection::class);
+    $container->set(ProductManager::class);
+
+    $container->load(
+        'BehatExtension\\DoctrineDataFixturesExtension\\Tests\\DemoBundle\\Tests\\DataFixtures\\',
+        __DIR__ . '/../../Tests/DataFixtures/*'
+    );
 };
