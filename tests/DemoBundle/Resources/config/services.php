@@ -22,9 +22,8 @@ return function (ContainerConfigurator $container) {
         ->autowire();
 
     $container->set(ProductManager::class);
-
     $container->load(
         'BehatExtension\\DoctrineDataFixturesExtension\\Tests\\DemoBundle\\Tests\\DataFixtures\\',
         __DIR__.'/../../Tests/DataFixtures/*'
-    );
+    )->private();
 };
