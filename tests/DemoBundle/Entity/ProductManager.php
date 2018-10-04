@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle\Entity;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\Common\Persistence\ObjectManager;
 
 class ProductManager
 {
