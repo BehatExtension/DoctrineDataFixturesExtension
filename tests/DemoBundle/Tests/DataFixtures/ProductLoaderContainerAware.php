@@ -17,24 +17,30 @@ use BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle\Entity\Product
 use BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle\Entity\ProductManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Bridge\Doctrine\ManagerRegistry;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class ProductLoaderWithDependencyInjection extends Fixture
+class ProductLoaderContainerAware extends Fixture implements ContainerAwareInterface
 {
-    private $service;
+    private $container;
 
-    public function __construct(ProductManager $service)
+    public function setContainer(ContainerInterface $container = null)
     {
-        $this->service = $service;
+        $this->container = $container;
     }
 
     public function load(ObjectManager $manager)
     {
-        array_map(function (array $item) {
+        /** @var ProductManager $service */
+        $service = $this->container->get(ProductManager::class);
+
+        array_map(function (array $item) use ($service) {
             $product = new Product(
                 $item['name'],
                 $item['description']
             );
-            $this->service->create($product);
+            $service->create($product);
         }, $this->getData());
     }
 
@@ -42,12 +48,12 @@ class ProductLoaderWithDependencyInjection extends Fixture
     {
         return [
             [
-                'name'        => 'Product #5',
-                'description' => 'This is the product number 5',
+                'name'        => 'Product #3',
+                'description' => 'This is the product number 3',
             ],
             [
-                'name'        => 'Product #6',
-                'description' => 'This is the product number 6',
+                'name'        => 'Product #4',
+                'description' => 'This is the product number 4',
             ],
         ];
     }

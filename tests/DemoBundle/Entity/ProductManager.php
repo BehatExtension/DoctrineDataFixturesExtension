@@ -18,26 +18,12 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 class ProductManager
 {
-    /**
-     * @var string
-     */
     private $class;
 
-    /**
-     * @var ManagerRegistry
-     */
     private $managerRegistry;
 
-    /**
-     * @var ObjectManager
-     */
     private $entityManager;
 
-    /**
-     * ProductManager constructor.
-     *
-     * @param ManagerRegistry $managerRegistry
-     */
     public function __construct(ManagerRegistry $managerRegistry)
     {
         $this->class = Product::class;
@@ -45,10 +31,7 @@ class ProductManager
         $this->entityManager = $this->managerRegistry->getManagerForClass($this->class);
     }
 
-    /**
-     * @param Product $product
-     */
-    public function create(Product $product)
+    public function create(Product $product): void
     {
         $this->entityManager->persist($product);
         $this->entityManager->flush();
