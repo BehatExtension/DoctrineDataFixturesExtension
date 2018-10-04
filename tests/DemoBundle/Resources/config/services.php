@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 use BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle\Entity\ProductManager;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\ref;
 
 return function (ContainerConfigurator $container) {
     $container = $container->services()
@@ -26,6 +25,6 @@ return function (ContainerConfigurator $container) {
 
     $container->load(
         'BehatExtension\\DoctrineDataFixturesExtension\\Tests\\DemoBundle\\Tests\\DataFixtures\\',
-        __DIR__ . '/../../Tests/DataFixtures/*'
+        __DIR__.'/../../Tests/DataFixtures/*'
     );
 };
