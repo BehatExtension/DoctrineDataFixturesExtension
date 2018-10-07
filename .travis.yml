@@ -17,9 +17,7 @@ matrix:
     - php: 7.1
       env: SYMFONY_VERSION='3.4.*'
     - php: 7.1
-      env: SYMFONY_VERSION='4.0.*'
-    - php: 7.1
-      env: DEPS=dev SYMFONY_VERSION='4.1.*'
+      env: SYMFONY_VERSION='4.1.*'
     - php: 7.2
       env: SYMFONY_VERSION='4.0.*'
     - php: 7.2
@@ -27,10 +25,8 @@ matrix:
     - php: nightly
       env: DEPS=dev SYMFONY_VERSION='4.2.*'
   allow_failures:
-    - php: 7.1
-      env: SYMFONY_VERSION='4.1.*'
     - php: nightly
-      env: SYMFONY_VERSION='4.1.*'
+      env: DEPS=dev SYMFONY_VERSION='4.2.*'
 
 before_install:
   - composer self-update
