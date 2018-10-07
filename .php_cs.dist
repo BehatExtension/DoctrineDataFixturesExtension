@@ -31,7 +31,6 @@ return PhpCsFixer\Config::create()
             'scope' => 'namespaced',
         ],
         'mb_str_functions' => true,
-        'method_chaining_indentation' => true,
         'linebreak_after_opening_tag' => true,
         'combine_consecutive_issets' => true,
         'combine_consecutive_unsets' => true,
