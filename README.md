@@ -36,7 +36,7 @@ When **directories** is set, the extension will load the data fixtures globed fr
 Classes MUST not have any constructor arguments (or at least optional).
 If the interface `Symfony\Component\DependencyInjection\ContainerAwareInterface` is implemented, the container is set to the fixture loader.
 
-This extunsion will also load every fixtures declared as services and tagged with `doctrine.fixture.orm`.
+This extension will also load every fixtures declared as services and tagged with `doctrine.fixture.orm`.
 
 ```yaml
 # behat.yml
