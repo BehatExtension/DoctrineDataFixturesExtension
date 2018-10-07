@@ -11,7 +11,6 @@ default:
         Behat\Symfony2Extension: ~
         BehatExtension\DoctrineDataFixturesExtension\Extension:
             lifetime: 'scenario'
-            autoload: false
             use_backup: true
     suites:
         fixtures:

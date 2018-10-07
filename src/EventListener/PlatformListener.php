@@ -25,9 +25,6 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class PlatformListener implements EventSubscriber
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getSubscribedEvents()
     {
         return [
@@ -38,12 +35,6 @@ class PlatformListener implements EventSubscriber
 
     /**
      * Pre-truncate.
-     *
-     * @param LifecycleEventArgs $args
-     *
-     * @throws \Doctrine\DBAL\DBALException
-     *
-     * @return void
      */
     public function preTruncate(LifecycleEventArgs $args): void
     {
@@ -62,12 +53,6 @@ class PlatformListener implements EventSubscriber
 
     /**
      * Post-truncate.
-     *
-     * @param LifecycleEventArgs $args
-     *
-     * @throws \Doctrine\DBAL\DBALException
-     *
-     * @return void
      */
     public function postTruncate(LifecycleEventArgs $args): void
     {

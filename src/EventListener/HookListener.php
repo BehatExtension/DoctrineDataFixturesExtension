@@ -27,9 +27,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class HookListener implements EventSubscriberInterface
 {
-    /**
-     * @var string feature|scenario
-     */
     private $lifetime;
 
     /**
@@ -37,38 +34,26 @@ class HookListener implements EventSubscriberInterface
      */
     private $fixtureService;
 
-    /**
-     * Constructor.
-     *
-     * @param string $lifetime
-     */
     public function __construct(string $lifetime)
     {
         $this->lifetime = $lifetime;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getSubscribedEvents()
     {
         return [
             ExerciseCompleted::BEFORE => 'beforeExercise',
-            FeatureTested::BEFORE     => 'beforeFeature',
-            FeatureTested::AFTER      => 'afterFeature',
-            ExampleTested::BEFORE     => 'beforeScenario',
-            ScenarioTested::BEFORE    => 'beforeScenario',
-            ExampleTested::AFTER      => 'afterScenario',
-            ScenarioTested::AFTER     => 'afterScenario',
+            FeatureTested::BEFORE => 'beforeFeature',
+            FeatureTested::AFTER => 'afterFeature',
+            ExampleTested::BEFORE => 'beforeScenario',
+            ScenarioTested::BEFORE => 'beforeScenario',
+            ExampleTested::AFTER => 'afterScenario',
+            ScenarioTested::AFTER => 'afterScenario',
         ];
     }
 
     /**
      * Set fixture service.
-     *
-     * @param FixtureService $service
-     *
-     * @return void
      */
     public function setFixtureService(FixtureService $service): void
     {
@@ -77,8 +62,6 @@ class HookListener implements EventSubscriberInterface
 
     /**
      * Listens to "exercise.before" event.
-     *
-     * @return void
      */
     public function beforeExercise(): void
     {
@@ -87,8 +70,6 @@ class HookListener implements EventSubscriberInterface
 
     /**
      * Listens to "feature.before" event.
-     *
-     * @return void
      */
     public function beforeFeature(): void
     {
@@ -101,8 +82,6 @@ class HookListener implements EventSubscriberInterface
 
     /**
      * Listens to "feature.after" event.
-     *
-     * @return void
      */
     public function afterFeature(): void
     {
@@ -115,8 +94,6 @@ class HookListener implements EventSubscriberInterface
 
     /**
      * Listens to "scenario.before" and "outline.example.before" event.
-     *
-     * @return void
      */
     public function beforeScenario(): void
     {
@@ -129,8 +106,6 @@ class HookListener implements EventSubscriberInterface
 
     /**
      * Listens to "scenario.after" and "outline.example.after" event.
-     *
-     * @return void
      */
     public function afterScenario(): void
     {

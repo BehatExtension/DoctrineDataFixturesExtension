@@ -18,29 +18,15 @@ use Behat\Behat\Context\Initializer\ContextInitializer;
 use BehatExtension\DoctrineDataFixturesExtension\Context\FixtureServiceAwareContextInterface;
 use BehatExtension\DoctrineDataFixturesExtension\Service\FixtureService;
 
-/**
- * Class FixtureServiceAwareInitializer.
- */
 final class FixtureServiceAwareInitializer implements ContextInitializer
 {
-    /**
-     * @var FixtureService
-     */
     private $fixtureService;
 
-    /**
-     * FixtureServiceAwareInitializer constructor.
-     *
-     * @param FixtureService $fixtureService
-     */
     public function __construct(FixtureService $fixtureService)
     {
         $this->fixtureService = $fixtureService;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initializeContext(Context $context)
     {
         if (!$context instanceof FixtureServiceAwareContextInterface && !$this->usesReferenceDictionary($context)) {
@@ -52,10 +38,6 @@ final class FixtureServiceAwareInitializer implements ContextInitializer
 
     /**
      * Checks whether the context uses the ReferenceDictionary trait.
-     *
-     * @param Context $context
-     *
-     * @return bool
      */
     private function usesReferenceDictionary(Context $context): bool
     {
@@ -65,6 +47,6 @@ final class FixtureServiceAwareInitializer implements ContextInitializer
             return false;
         }
 
-        return in_array('BehatExtension\DoctrineDataFixturesExtension\Context\ReferenceDictionary', $refl->getTraitNames());
+        return \in_array('BehatExtension\DoctrineDataFixturesExtension\Context\ReferenceDictionary', $refl->getTraitNames(), true);
     }
 }

@@ -34,9 +34,6 @@ return function (ContainerConfigurator $container) {
     $container->set(FixtureService::class)
         ->args([
             ref('symfony2_extension.kernel'),
-            '%behat.doctrine_data_fixtures.autoload%',
-            '%behat.doctrine_data_fixtures.fixtures%',
-            '%behat.doctrine_data_fixtures.directories%',
         ]);
     $container->set(FixtureServiceAwareInitializer::class)
         ->args([

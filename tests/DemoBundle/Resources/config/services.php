@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 use BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle\Entity\ProductManager;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use BehatExtension\DoctrineDataFixturesExtension\Tests\DemoBundle\Tests\IsolatedProductLoader;
 
 return function (ContainerConfigurator $container) {
     $container = $container->services()
@@ -26,4 +27,9 @@ return function (ContainerConfigurator $container) {
         'BehatExtension\\DoctrineDataFixturesExtension\\Tests\\DemoBundle\\Tests\\DataFixtures\\',
         __DIR__.'/../../Tests/DataFixtures/*'
     )->private();
+    $container->load(
+        'BehatExtension\\DoctrineDataFixturesExtension\\Tests\\DemoBundle\\DataFixtures\\ORM\\',
+        __DIR__.'/../../DataFixtures/ORM/*'
+    )->private();
+    $container->set(IsolatedProductLoader::class)->private();
 };

@@ -33,41 +33,21 @@ class BackupService
      */
     private $platformBackupMap;
 
-    /**
-     * @param string $cacheDir
-     *
-     * @return void
-     */
     public function setCacheDir(string $cacheDir): void
     {
         $this->cacheDir = $cacheDir;
     }
 
-    /**
-     * @param BackupInterface $backup
-     *
-     * @return void
-     */
     public function addBackupService(BackupInterface $backup): void
     {
         $this->platformBackupMap[$backup->name()] = $backup;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
     public function hasBackupService(string $name): bool
     {
         return array_key_exists($name, $this->platformBackupMap);
     }
 
-    /**
-     * @param string $name
-     *
-     * @return BackupInterface
-     */
     public function getBackupService(string $name): BackupInterface
     {
         if (!$this->hasBackupService($name)) {
@@ -79,10 +59,6 @@ class BackupService
 
     /**
      * Returns absolute path to backup file.
-     *
-     * @param string $hash
-     *
-     * @return string
      */
     public function getBackupFile(string $hash): string
     {
@@ -91,10 +67,6 @@ class BackupService
 
     /**
      * Check if there is a backup.
-     *
-     * @param string $hash
-     *
-     * @return bool
      */
     public function hasBackup(string $hash): bool
     {
@@ -103,11 +75,6 @@ class BackupService
 
     /**
      * Create a backup for the given connection / hash.
-     *
-     * @param Connection $connection
-     * @param string     $hash
-     *
-     * @return void
      */
     public function createBackup(Connection $connection, string $hash): void
     {
@@ -121,11 +88,6 @@ class BackupService
 
     /**
      * Restore the backup for the given connection / hash.
-     *
-     * @param Connection $connection
-     * @param string     $hash
-     *
-     * @return void
      */
     public function restoreBackup(Connection $connection, string $hash): void
     {

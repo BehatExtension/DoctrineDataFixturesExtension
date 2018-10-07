@@ -22,30 +22,16 @@ interface BackupInterface
 {
     /**
      * The name of the platform supported by the backup.
-     *
-     * @return string
      */
     public function name(): string;
 
     /**
      * Create a backup file for the given database.
-     *
-     * @param string $database
-     * @param string $file
-     * @param array  $params
-     *
-     * @return void
      */
     public function create(string $database, string $file, array $params): void;
 
     /**
      * Restore the backup file into the given database.
-     *
-     * @param string $database
-     * @param string $file
-     * @param array  $params
-     *
-     * @return void
      */
     public function restore(string $database, string $file, array $params): void;
 }

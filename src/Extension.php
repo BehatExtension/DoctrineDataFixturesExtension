@@ -30,62 +30,34 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 final class Extension implements ExtensionInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigKey()
     {
         return 'doctrine_data_fixtures';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
         $builder
             ->addDefaultsIfNotSet()
             ->children()
-                ->booleanNode('autoload')
-                    ->info('When true, the extension will load the data fixtures for all registered bundles')
-                    ->defaultTrue()
-                ->end()
-                ->booleanNode('use_backup')
-                    ->info('When true, the extension will backup the database and restore it when needed')
-                    ->defaultTrue()
-                ->end()
-                ->arrayNode('directories')
-                    ->defaultValue([])
-                    ->treatFalseLike([])
-                    ->treatNullLike([])
-                    ->scalarPrototype()->end()
-                ->end()
-                ->arrayNode('fixtures')
-                    ->defaultValue([])
-                    ->treatFalseLike([])
-                    ->treatNullLike([])
-                    ->scalarPrototype()->end()
-                ->end()
-                ->scalarNode('lifetime')
-                    ->defaultValue('feature')
-                    ->validate()
-                        ->ifNotInArray(['feature', 'scenario'])
-                        ->thenInvalid('Invalid fixtures lifetime "%s"')
-                    ->end()
-                ->end()
+            ->booleanNode('use_backup')
+            ->info('When true, the extension will backup the database and restore it when needed')
+            ->defaultTrue()
+            ->end()
+            ->scalarNode('lifetime')
+            ->defaultValue('feature')
+            ->validate()
+            ->ifNotInArray(['feature', 'scenario'])
+            ->thenInvalid('Invalid fixtures lifetime "%s"')
+            ->end()
+            ->end()
             ->end();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $loader = new PhpFileLoader($container, new FileLocator(__DIR__.'/Resources/config'));
@@ -96,15 +68,12 @@ final class Extension implements ExtensionInterface
             $loader->load('backup.php');
         }
 
-        $keys = ['autoload', 'directories', 'fixtures', 'lifetime'];
+        $keys = ['lifetime'];
         foreach ($keys as $key) {
             $container->setParameter('behat.doctrine_data_fixtures.'.$key, $config[$key]);
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         //Backup Services

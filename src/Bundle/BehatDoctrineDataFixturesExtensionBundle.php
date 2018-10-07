@@ -20,9 +20,6 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 final class BehatDoctrineDataFixturesExtensionBundle extends Bundle
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getContainerExtension()
     {
         return new class() extends Extension {

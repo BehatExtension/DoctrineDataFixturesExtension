@@ -22,31 +22,15 @@ use Symfony\Component\Process\Process;
  */
 final class MysqlDumpBackup implements BackupInterface
 {
-    /**
-     * @var string
-     */
     private $mysqldumpBin = 'mysqldump';
 
-    /**
-     * @var string
-     */
     private $mysqlBin = 'mysql';
 
-    /**
-     * {@inheritdoc}
-     */
     public function name(): string
     {
         return 'mysql';
     }
 
-    /**
-     * @param string $command
-     *
-     * @throws \RuntimeException
-     *
-     * @return null|int
-     */
     private function runCommand(string $command): ?int
     {
         $process = new Process($command);
@@ -60,22 +44,19 @@ final class MysqlDumpBackup implements BackupInterface
         return $process->getExitCode();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function create(string $database, string $file, array $params): void
     {
         $command = sprintf('%s %s > %s', $this->mysqldumpBin, escapeshellarg($database), escapeshellarg($file));
 
-        if (isset($params['host']) && strlen($params['host'])) {
+        if (isset($params['host']) && \mb_strlen($params['host'])) {
             $command .= sprintf(' --host=%s', escapeshellarg($params['host']));
         }
 
-        if (isset($params['user']) && strlen($params['user'])) {
+        if (isset($params['user']) && \mb_strlen($params['user'])) {
             $command .= sprintf(' --user=%s', escapeshellarg($params['user']));
         }
 
-        if (isset($params['password']) && strlen($params['password'])) {
+        if (isset($params['password']) && \mb_strlen($params['password'])) {
             $command .= sprintf(' --password=%s', escapeshellarg($params['password']));
         }
 
@@ -86,22 +67,19 @@ final class MysqlDumpBackup implements BackupInterface
         $this->runCommand($command);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function restore(string $database, string $file, array $params): void
     {
         $command = sprintf('%s %s < %s', $this->mysqlBin, escapeshellarg($database), escapeshellarg($file));
 
-        if (isset($params['host']) && strlen($params['host'])) {
+        if (isset($params['host']) && \mb_strlen($params['host'])) {
             $command .= sprintf(' --host=%s', escapeshellarg($params['host']));
         }
 
-        if (isset($params['user']) && strlen($params['user'])) {
+        if (isset($params['user']) && \mb_strlen($params['user'])) {
             $command .= sprintf(' --user=%s', escapeshellarg($params['user']));
         }
 
-        if (isset($params['password']) && strlen($params['password'])) {
+        if (isset($params['password']) && \mb_strlen($params['password'])) {
             $command .= sprintf(' --password=%s', escapeshellarg($params['password']));
         }
 
