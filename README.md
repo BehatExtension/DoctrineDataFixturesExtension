@@ -20,7 +20,6 @@ default:
   extensions:
     BehatExtension\DoctrineDataFixturesExtension\Extension:
       lifetime:    'feature'
-      autoload:    true
       directories: ~
       fixtures:    ~
 ```
@@ -29,14 +28,15 @@ When **lifetime** is set to "feature" (or unspecified), data fixtures are reload
 when **lifetime** is set to "scenario", data fixtures are reloaded between scenarios (i.e., increased
 test isolation at the expense of increased run time).
 
-When **autoload** is true, the extension will load the data fixtures for registered bundles.
-Please note that only fixtures stored in the folder `/DataFixtures/ORM` of the bundles are loaded.
-If you want to load fixtures tagged with `doctrine.fixture.orm`, you must enable the bundle `BehatExtension\DoctrineDataFixturesExtension\Bundle\BehatDoctrineDataFixturesExtensionBundle`
-in your test `AppKernel` class.
+When **fixtures** is set, the extension will load the specified fixture classes.
+This must contain a list of fully qualified class names. Classes MUST not have any constructor arguments (or at least optional).
+If the interface `Symfony\Component\DependencyInjection\ContainerAwareInterface` is implemented, the container is set to the fixture loader.
 
-When **fixtures** is set, the DoctrineDataFixtures extension will load the specified fixture classes.
+When **directories** is set, the extension will load the data fixtures globed from the respective directories.
+Classes MUST not have any constructor arguments (or at least optional).
+If the interface `Symfony\Component\DependencyInjection\ContainerAwareInterface` is implemented, the container is set to the fixture loader.
 
-When **directories** is set, the DoctrineDataFixtures extension will load the data fixtures globed from the respective directories.
+This extunsion will also load every fixtures declared as services and tagged with `doctrine.fixture.orm`.
 
 ```yaml
 # behat.yml
@@ -45,7 +45,6 @@ default:
   extensions:
     BehatExtension\DoctrineDataFixturesExtension\Extension:
       lifetime: 'feature'
-      autoload: true
       directories:
         - '/project/src/AcmeAnalytics/Tests/DataFixtures/ORM'
       fixtures:
@@ -59,7 +58,10 @@ default:
 To speed up the tests, a backup system is available. The whole database will be set in cache and reloaded when needed.
 You should periodically clear the cache as it does not detect changes to the data fixture contents because the hash is based on the collection of data fixture class names.
 
-This feature is only available for the following SGDB: SQLite, MySQL, PostgreSQL.
+This feature is only available for SQLite, MySQL and PostgreSQL.
+
+* For MySQL, `mysql` and `mysqldump` must be available.
+* For PostgreSQL, `pg_restore` and `pg_dump` must be available.
 
 It is enabled by default. To disable it, you just have to set `use_backup: false` in the extension configuration:
 
@@ -70,7 +72,6 @@ default:
   extensions:
     BehatExtension\DoctrineDataFixturesExtension\Extension:
       lifetime: 'feature'
-      autoload: true
       use_backup: false
 ```
 
