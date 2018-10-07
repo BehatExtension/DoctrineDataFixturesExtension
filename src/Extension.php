@@ -44,17 +44,34 @@ final class Extension implements ExtensionInterface
         $builder
             ->addDefaultsIfNotSet()
             ->children()
-            ->booleanNode('use_backup')
-            ->info('When true, the extension will backup the database and restore it when needed')
-            ->defaultTrue()
-            ->end()
-            ->scalarNode('lifetime')
-            ->defaultValue('feature')
-            ->validate()
-            ->ifNotInArray(['feature', 'scenario'])
-            ->thenInvalid('Invalid fixtures lifetime "%s"')
-            ->end()
-            ->end()
+                ->booleanNode('autoload')
+                    ->info('When true, the extension will load the data fixtures for all registered bundles')
+                    ->defaultFalse()
+                    ->setDeprecated('This option has no effect anymore. For each bundle, please declare your fixtures as services and tagged with "doctrine.fixture.orm".')
+                ->end()
+                ->booleanNode('use_backup')
+                    ->info('When true, the extension will backup the database and restore it when needed')
+                    ->defaultTrue()
+                ->end()
+                ->arrayNode('directories')
+                    ->defaultValue([])
+                    ->treatFalseLike([])
+                    ->treatNullLike([])
+                    ->scalarPrototype()->cannotBeEmpty()->end()
+                ->end()
+                ->arrayNode('fixtures')
+                    ->defaultValue([])
+                    ->treatFalseLike([])
+                    ->treatNullLike([])
+                    ->scalarPrototype()->cannotBeEmpty()->end()
+                ->end()
+                ->scalarNode('lifetime')
+                    ->defaultValue('feature')
+                    ->validate()
+                        ->ifNotInArray(['feature', 'scenario'])
+                        ->thenInvalid('Invalid fixtures lifetime "%s"')
+                    ->end()
+                ->end()
             ->end();
     }
 
@@ -68,7 +85,7 @@ final class Extension implements ExtensionInterface
             $loader->load('backup.php');
         }
 
-        $keys = ['lifetime'];
+        $keys = ['lifetime', 'autoload', 'fixtures', 'directories'];
         foreach ($keys as $key) {
             $container->setParameter('behat.doctrine_data_fixtures.'.$key, $config[$key]);
         }

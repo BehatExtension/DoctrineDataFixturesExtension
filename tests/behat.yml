@@ -12,6 +12,10 @@ default:
         BehatExtension\DoctrineDataFixturesExtension\Extension:
             lifetime: 'scenario'
             use_backup: true
+            fixtures:
+                - 'BehatExtension\DoctrineDataFixturesExtension\Tests\Dummy\DummyProductLoader'
+            directories:
+                - './Dummy/Fixtures'
     suites:
         fixtures:
             type: 'symfony_bundle'
