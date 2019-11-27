@@ -13,25 +13,12 @@ declare(strict_types=1);
 
 namespace BehatExtension\DoctrineDataFixturesExtension\Bundle;
 
-use Symfony\Component\DependencyInjection\Alias;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 final class BehatDoctrineDataFixturesExtensionBundle extends Bundle
 {
-    public function getContainerExtension()
+    public function getContainerExtensionClass()
     {
-        return new class() extends Extension {
-            public function load(array $configs, ContainerBuilder $container)
-            {
-                $container->setAlias('doctrine.fixtures.loader.alias', new Alias('doctrine.fixtures.loader', true));
-            }
-
-            public function getAlias()
-            {
-                return 'behat_doctrine_data_fixtures_extension';
-            }
-        };
+        return BehatDoctrineDataFixturesExtension::class;
     }
 }
